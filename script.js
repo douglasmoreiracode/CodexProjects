@@ -12,6 +12,10 @@ const DAY_LABELS = {
   sexta: 'Sexta-feira'
 };
 
+// Persistence keys
+const TASKS_KEY = 'todo_dashboard_tasks_v1';
+const AVATAR_KEY = 'todo_dashboard_avatar_v1';
+
 const initialTasks = [
   { id: crypto.randomUUID(), title: 'Planejar sprint', status: 'todo', day: 'segunda', start: '09:00', end: '10:30' },
   { id: crypto.randomUUID(), title: 'Reunião com equipe', status: 'progress', day: 'segunda', start: '11:00', end: '12:00' },
@@ -21,7 +25,7 @@ const initialTasks = [
   { id: crypto.randomUUID(), title: 'Retrospectiva', status: 'done', day: 'sexta', start: '15:00', end: '16:00' }
 ];
 
-let tasks = [...initialTasks];
+let tasks = [];
 
 const weeklyHours = {
   segunda: 6,
@@ -44,6 +48,36 @@ const formEl = document.getElementById('task-form');
 const cancelFormBtn = document.getElementById('cancel-task');
 const avatarInput = document.getElementById('avatar-input');
 const avatarPreview = document.getElementById('avatar-preview');
+
+// ---- Persistence helpers ----
+function saveTasks() {
+  try {
+    localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+  } catch {}
+}
+
+function loadTasks() {
+  try {
+    const raw = localStorage.getItem(TASKS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return null;
+    // Basic sanity: ensure required fields
+    return parsed
+      .filter((t) => t && t.title && t.status && t.day && t.start && t.end)
+      .map((t) => ({ id: t.id || crypto.randomUUID(), ...t }));
+  } catch {
+    return null;
+  }
+}
+
+function saveAvatar(src) {
+  try { localStorage.setItem(AVATAR_KEY, src); } catch {}
+}
+
+function loadAvatar() {
+  try { return localStorage.getItem(AVATAR_KEY); } catch { return null; }
+}
 
 function renderWeeklyCalendar() {
   const today = new Date();
@@ -116,7 +150,7 @@ function updateProgressModules() {
     .join(', ');
 
   donutEl.style.background = percentages.every((item) => item.percentage === 0)
-    ? 'conic-gradient(#e2e8f0 0deg 360deg)'
+    ? 'conic-gradient(#2a2f36 0deg 360deg)'
     : `conic-gradient(${segments})`;
 
   legendEl.innerHTML = percentages
@@ -162,7 +196,7 @@ function renderAgenda() {
       const taskItems = items
         .map(
           (task) => `
-            <div class="task-item" data-id="${task.id}">
+            <div class="task-item" data-id="${task.id}" data-status="${task.status}">
               <div>
                 <p class="task-name">${task.title}</p>
                 <p class="task-time">${task.start} - ${task.end}</p>
@@ -214,6 +248,7 @@ formEl?.addEventListener('submit', (event) => {
   if (!title || !start || !end) return;
 
   tasks.push({ id: crypto.randomUUID(), title, status, day, start, end });
+  saveTasks();
   formEl.reset();
   toggleForm(false);
   updateDashboard();
@@ -233,7 +268,11 @@ agendaEl.addEventListener('change', (event) => {
   const taskId = taskItem?.dataset.id;
   if (!taskId) return;
 
+  // Reflect the status on DOM for styling
+  taskItem.dataset.status = event.target.value;
+
   tasks = tasks.map((task) => (task.id === taskId ? { ...task, status: event.target.value } : task));
+  saveTasks();
   updateDashboard();
 });
 
@@ -243,7 +282,9 @@ avatarInput?.addEventListener('change', (event) => {
 
   const reader = new FileReader();
   reader.onload = (e) => {
-    avatarPreview.src = e.target?.result;
+    const src = e.target?.result;
+    avatarPreview.src = src;
+    if (typeof src === 'string') saveAvatar(src);
   };
   reader.readAsDataURL(file);
 });
@@ -319,6 +360,13 @@ toggleTimerBtn?.addEventListener('click', () => {
 });
 
 resetTimerBtn?.addEventListener('click', resetTimer);
+
+// Initial load: state from storage
+const storedTasks = loadTasks();
+tasks = storedTasks && storedTasks.length ? storedTasks : [...initialTasks];
+
+const storedAvatar = loadAvatar();
+if (storedAvatar) avatarPreview.src = storedAvatar;
 
 renderWeeklyCalendar();
 updateDashboard();
