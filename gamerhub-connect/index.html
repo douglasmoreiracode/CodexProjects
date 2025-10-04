@@ -12,13 +12,19 @@
   <body>
     <div id="app">
       <header class="ghc-header">
-        <button id="menu-toggle" class="icon-btn" aria-label="Menu" aria-expanded="false" aria-controls="main-menu">
-          <span class="icon-hamburger"></span>
-        </button>
-        <div class="brand">
-          <div class="brand-title">GamerHub</div>
-          <div class="brand-sub">CONNECT</div>
+        <div class="header-left">
+          <button id="menu-toggle" class="icon-btn" aria-label="Menu" aria-expanded="false" aria-controls="main-menu">
+            <span class="icon-hamburger"></span>
+          </button>
+          <div class="brand">
+            <div class="brand-title">GamerHub</div>
+            <div class="brand-sub">CONNECT</div>
+          </div>
         </div>
+        <button id="add-game-btn" class="add-game-btn" type="button" aria-haspopup="dialog">
+          <span class="add-game-icon" aria-hidden="true">+</span>
+          <span class="add-game-label">adicionar novo jogo à biblioteca</span>
+        </button>
       </header>
 
       <!-- Menu Hamburguer -->
@@ -60,7 +66,7 @@
     <div id="details-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
       <div class="modal-backdrop" data-close></div>
       <div class="modal-card" role="document">
-        <button class="icon-btn modal-close" data-close aria-label="Fechar">×</button>
+        <button class="icon-btn modal-close" data-close aria-label="Fechar">&times;</button>
 
         <div class="details-hero" id="details-hero">
           <div class="details-hero-overlay"></div>
@@ -68,7 +74,7 @@
             <span id="details-platform" class="badge">PLATAFORMA</span>
             <span id="details-progress" class="progress-chip">0%<br /><small>PROGRESSO</small></span>
           </div>
-          <h3 id="details-title" class="details-title">Título</h3>
+          <h3 id="details-title" class="details-title">T��tulo</h3>
           <div id="details-acquired" class="details-acquired">Adquirido em: --/--/----</div>
         </div>
 
@@ -91,6 +97,62 @@
               <div class="kv-row"><span>Gênero:</span><span id="details-genre">—</span></div>
             </div>
           </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Adicionar Jogo -->
+    <div id="add-game-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card add-modal" role="document">
+        <button class="icon-btn modal-close" data-close aria-label="Fechar formulário">&times;</button>
+        <h2 class="add-form-title">Adicionar novo jogo</h2>
+        <form id="add-game-form" class="add-form">
+          <div class="form-field">
+            <label for="game-name">Nome do jogo</label>
+            <input id="game-name" name="name" type="text" placeholder="Ex.: Hollow Knight" required />
+          </div>
+          <div class="form-field">
+            <label for="game-platform">Plataforma</label>
+            <select id="game-platform" name="platform" required>
+              <option value="" disabled selected>Selecione</option>
+              <option value="switch">Nintendo Switch</option>
+              <option value="ps">PlayStation 4</option>
+              <option value="pc">PC</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label for="game-acquired">Aquisição</label>
+            <input id="game-acquired" name="acquired" type="date" required />
+          </div>
+          <div class="form-field">
+            <label for="game-banner">Imagem do banner (URL)</label>
+            <input id="game-banner" name="banner" type="url" placeholder="https://exemplo.com/banner.jpg" />
+          </div>
+          <div class="form-field">
+            <label for="game-description">Informações do jogo</label>
+            <textarea id="game-description" name="description" rows="4" placeholder="Resumo, progresso ou observações"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" data-cancel-add>Cancelar</button>
+            <button type="submit" class="btn-primary">Adicionar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal Excluir Jogo -->
+    <div id="delete-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card confirm-modal" role="document">
+        <button class="icon-btn modal-close" data-close aria-label="Fechar confirmação">&times;</button>
+        <div class="confirm-content">
+          <h2 class="confirm-title">Você tem certeza que deseja excluir este jogo?</h2>
+          <p class="confirm-text">Essa ação removerá o jogo da sua biblioteca e não poderá ser desfeita.</p>
+          <div class="form-actions">
+            <button type="button" class="btn-secondary" data-cancel-delete>Cancelar</button>
+            <button type="button" class="btn-danger" data-confirm-delete>Excluir</button>
+          </div>
         </div>
       </div>
     </div>

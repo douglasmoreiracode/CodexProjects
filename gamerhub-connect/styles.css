@@ -33,8 +33,9 @@ body{
 #app{max-width: 480px; margin: 0 auto;}
 
 /* Header */
-.ghc-header{display:flex; align-items:center; gap:12px; padding:18px 16px; position:sticky; top:0; z-index:10; background:none}
+.ghc-header{display:flex; align-items:center; justify-content:space-between; padding:18px 16px; position:sticky; top:0; z-index:10; background:none}
 .ghc-header::before{content:""; position:absolute; inset:0; left:50%; width:100vw; transform:translateX(-50%); background:linear-gradient(180deg,#000 0%, rgba(0,0,0,.7) 60%, rgba(0,0,0,0) 100%); z-index:-1; pointer-events:none}
+.header-left{display:flex; align-items:center; gap:12px}
 .icon-btn{background:#1a1a1f; color:#fff; border:0; width:40px; height:40px; border-radius:12px; display:grid; place-items:center; box-shadow:var(--shadow);}
 .icon-btn:active{transform:translateY(1px)}
 .icon-hamburger{display:block; width:18px; height:2px; background:#fff; position:relative; transition:background .2s}
@@ -48,6 +49,17 @@ body{
 .brand{line-height:1}
 .brand-title{font-weight:800; letter-spacing:.2px}
 .brand-sub{font-size:12px; color:#c6c7d3; letter-spacing:.4em}
+
+.add-game-btn{display:flex; align-items:center; gap:12px; background:rgba(32,32,40,.88); color:#fff; border:0; border-radius:18px; padding:8px 18px 8px 10px; font-family:var(--font-family); font-weight:700; font-size:13px; text-transform:lowercase; letter-spacing:.02em; cursor:pointer; box-shadow:0 8px 24px rgba(0,0,0,.28); transition:background .2s ease, transform .2s ease}
+.add-game-btn:hover{background:rgba(40,40,52,.95)}
+.add-game-btn:active{transform:translateY(1px)}
+.add-game-icon{display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:10px; background:rgba(255,255,255,.12); font-size:18px; font-weight:600; line-height:1; pointer-events:none}
+.add-game-label{white-space:nowrap}
+
+@media (max-width: 420px){
+  .add-game-btn{font-size:12px; padding:8px 14px 8px 8px}
+  .add-game-label{white-space:normal}
+}
 
 /* Menu Hamburguer */
 .ghc-menu{display:none; padding:8px 16px 0 16px}
@@ -95,7 +107,11 @@ body{
 .content{padding:4px 16px 80px}
 .section-title{letter-spacing:.5em; font-weight:700; font-size:14px; color:#e5e7ef; margin:14px 0 18px}
 .game-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:18px}
-.game-item{display:flex; gap:14px; padding-bottom:18px; border-bottom:1px solid var(--divider)}
+.game-item{display:flex; gap:14px; padding-bottom:18px; border-bottom:1px solid var(--divider); position:relative}
+.card-delete{position:absolute; top:-2px; right:-2px; width:32px; height:32px; border:0; border-radius:12px; background:rgba(32,32,40,.9); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:600; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,.35); transition:background .2s ease, transform .15s ease}
+.card-delete:hover{background:rgba(45,45,58,1)}
+.card-delete:active{transform:translateY(1px)}
+.card-delete:focus-visible{outline:2px solid rgba(255,255,255,.35); outline-offset:2px}
 .thumb-wrap{position:relative; flex:0 0 110px}
 .thumb{width:110px; height:110px; border-radius:20px; object-fit:cover; display:block}
 .thumb-progress{position:absolute; left:8px; bottom:-8px; background:#0b0b0d; color:#fff; width:58px; height:58px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-weight:800; box-shadow:var(--shadow)}
@@ -112,6 +128,32 @@ body{
 .modal-backdrop{position:absolute; inset:0; background:rgba(0,0,0,.55)}
 .modal-card{position:absolute; inset:8% 12px auto 12px; max-height:84%; overflow:auto; background:#0b0b0d; border-radius:24px; box-shadow:var(--shadow)}
 .modal-close{position:absolute; right:10px; top:10px; z-index:2; width:36px; height:36px; border-radius:10px; background:#191a1f; color:#fff; font-size:18px}
+.modal-card.add-modal{left:50%; inset:12% auto auto 50%; transform:translateX(-50%); width:min(420px, calc(100% - 32px)); max-height:none; padding:32px 24px 28px; display:flex; flex-direction:column; gap:18px}
+.modal-card.add-modal .modal-close{right:18px; top:18px}
+.modal-card.confirm-modal{left:50%; inset:20% auto auto 50%; transform:translateX(-50%); width:min(360px, calc(100% - 40px)); padding:32px 24px 28px; display:flex; flex-direction:column; gap:18px; text-align:center}
+.modal-card.confirm-modal .modal-close{right:18px; top:18px}
+.confirm-content{display:flex; flex-direction:column; gap:18px}
+.confirm-title{margin:0; font-size:20px; font-weight:700; letter-spacing:-0.015em; color:#fff}
+.confirm-text{margin:0; color:var(--muted); font-size:14px; line-height:1.6}
+.add-form-title{margin:0; font-size:20px; font-weight:700; letter-spacing:-0.02em; color:#fff}
+.add-form{display:flex; flex-direction:column; gap:18px}
+.form-field{display:flex; flex-direction:column; gap:8px}
+.form-field label{font-size:12px; letter-spacing:.26em; color:rgba(255,255,255,.68); text-transform:uppercase}
+.form-field input,.form-field select,.form-field textarea{background:#1a1b22; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:12px 14px; color:#fff; font-size:14px; font-family:var(--font-family); transition:border-color .2s ease, box-shadow .2s ease}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:none; border-color:rgba(255,255,255,.22); box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.form-field select{appearance:none}
+.form-field textarea{min-height:110px; resize:vertical}
+.form-field option{color:#000}
+.form-actions{display:flex; justify-content:flex-end; gap:12px; margin-top:6px}
+.btn-secondary,.btn-primary,.btn-danger{border:0; border-radius:18px; padding:10px 20px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; cursor:pointer; transition:transform .15s ease, background .2s ease}
+.btn-secondary{background:rgba(255,255,255,.08); color:#fff}
+.btn-secondary:hover{background:rgba(255,255,255,.13)}
+.btn-primary{background:var(--primary); color:#fff}
+.btn-primary:hover{background:#ff3c3c}
+.btn-danger{background:#ff5f5f; color:#fff}
+.btn-danger:hover{background:#ff7676}
+.btn-secondary:active,.btn-primary:active,.btn-danger:active{transform:translateY(1px)}
+.btn-secondary:focus-visible,.btn-primary:focus-visible,.btn-danger:focus-visible{outline:2px solid rgba(255,255,255,.4); outline-offset:2px}
 .details-hero{position:relative; height:220px; border-top-left-radius:24px; border-top-right-radius:24px; overflow:hidden; background:#111}
 .details-hero img{width:100%; height:100%; object-fit:cover}
 .details-hero-overlay{position:absolute; inset:auto 0 0 0; height:55%; background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(230,50,50,.9) 100%)}

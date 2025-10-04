@@ -147,6 +147,11 @@ function platformBadgeClass(key){
 
 function renderFeatured(game){
   const root = el('#featured');
+  if (!root) return;
+  if (!game){
+    root.innerHTML = '';
+    return;
+  }
   root.innerHTML = `
     <article class="featured-card">
       <img class="featured-img" src="${game.banner}" alt="${game.title}"/>
@@ -168,11 +173,13 @@ function renderFeatured(game){
 
 function renderList(list){
   const ul = el('#game-list');
+  if (!ul) return;
   ul.innerHTML = '';
   list.forEach(g => {
     const li = document.createElement('li');
     li.className = 'game-item';
     li.innerHTML = `
+      <button class="card-delete" data-delete data-id="${g.id}" aria-label="Remover ${g.title}">&times;</button>
       <div class="thumb-wrap">
         <img class="thumb" src="${g.cover}" alt="${g.title}" />
         <div class="thumb-progress">${g.progress}%<small>PROGRESSO</small></div>
@@ -188,6 +195,14 @@ function renderList(list){
     `;
     ul.appendChild(li);
   });
+}
+
+function refreshFeatured(){
+  if (!games.length){
+    renderFeatured(null);
+  } else {
+    renderFeatured(games[0]);
+  }
 }
 
 function openDetails(game){
@@ -237,19 +252,114 @@ function closeDetails(){
   if (modal) modal.setAttribute('aria-hidden', 'true');
 }
 
+function openAddModal(){
+  const modal = el('#add-game-modal');
+  if (!modal) return;
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(() => {
+    const first = el('#game-name');
+    if (first) first.focus();
+  }, 50);
+}
+
+function resetAddForm(){
+  const form = el('#add-game-form');
+  if (form) form.reset();
+}
+
+function closeAddModal(){
+  const modal = el('#add-game-modal');
+  if (!modal) return;
+  modal.setAttribute('aria-hidden', 'true');
+  resetAddForm();
+}
+
+function openDeleteModal(id){
+  const modal = el('#delete-modal');
+  if (!modal) return;
+  modal.dataset.targetId = id;
+  modal.setAttribute('aria-hidden', 'false');
+  setTimeout(() => {
+    const confirmBtn = modal.querySelector('[data-confirm-delete]');
+    if (confirmBtn) confirmBtn.focus();
+  }, 50);
+}
+
+function closeDeleteModal(){
+  const modal = el('#delete-modal');
+  if (!modal) return;
+  modal.setAttribute('aria-hidden', 'true');
+  delete modal.dataset.targetId;
+}
+
 function wireEvents(){
   const appRoot = el('#app');
   const menuBtn = el('#menu-toggle');
 
   document.addEventListener('click', (e) => {
+    const addTrigger = e.target.closest('#add-game-btn');
+    if (addTrigger){
+      if (appRoot && appRoot.classList.contains('menu-open')){
+        appRoot.classList.remove('menu-open');
+        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+      }
+      openAddModal();
+      return;
+    }
+
+    const cancelAdd = e.target.closest('[data-cancel-add]');
+    if (cancelAdd){
+      closeAddModal();
+      return;
+    }
+
+    const deleteTrigger = e.target.closest('[data-delete]');
+    if (deleteTrigger){
+      const id = deleteTrigger.getAttribute('data-id');
+      if (id) openDeleteModal(id);
+      return;
+    }
+
+    const cancelDelete = e.target.closest('[data-cancel-delete]');
+    if (cancelDelete){
+      closeDeleteModal();
+      return;
+    }
+
+    const confirmDelete = e.target.closest('[data-confirm-delete]');
+    if (confirmDelete){
+      const modal = el('#delete-modal');
+      const targetId = modal ? modal.dataset.targetId : null;
+      if (targetId){
+        const idx = games.findIndex(g => g.id === targetId);
+        if (idx >= 0){
+          games.splice(idx, 1);
+          refreshFeatured();
+          renderList(games);
+          closeDetails();
+        }
+      }
+      closeDeleteModal();
+      return;
+    }
+
     const infoBtn = e.target.closest('[data-info]');
     if (infoBtn){
       const id = infoBtn.getAttribute('data-id');
       const g = games.find(x => x.id === id);
       if (g) openDetails(g);
+      if (appRoot && appRoot.classList.contains('menu-open')){
+        appRoot.classList.remove('menu-open');
+        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+      }
+      return;
     }
+
     if (e.target.matches('[data-close]')){
       closeDetails();
+      closeAddModal();
+      closeDeleteModal();
+      return;
     }
 
     // toggle do menu hamburger
@@ -271,6 +381,8 @@ function wireEvents(){
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape'){
       closeDetails();
+      closeAddModal();
+      closeDeleteModal();
       // fecha menu via Esc
       const appRoot = el('#app');
       const menuBtn = el('#menu-toggle');
@@ -280,12 +392,62 @@ function wireEvents(){
       }
     }
   });
+
+  const addForm = el('#add-game-form');
+  if (addForm){
+    addForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(addForm);
+      const name = String(formData.get('name') || '').trim();
+      const platformKey = formData.get('platform');
+      const acquired = formData.get('acquired');
+      const bannerInput = String(formData.get('banner') || '').trim();
+      const gameInfo = String(formData.get('description') || '').trim();
+      if (!name || !platformKey || !acquired) return;
+
+      const platformSelect = addForm.querySelector('#game-platform');
+      const platformLabel = platformSelect ? platformSelect.options[platformSelect.selectedIndex].text.trim() : String(platformKey);
+
+      const normalized = name.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      const slug = normalized.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || 'game';
+      const stamp = Date.now();
+      const seed = `${slug}-${stamp}`;
+
+      const fallbackCover = `https://picsum.photos/seed/${seed}/300/300`;
+      const fallbackBanner = `https://picsum.photos/seed/${seed}-hero/1000/560`;
+      const resolvedBanner = bannerInput || fallbackBanner;
+      const resolvedCover = bannerInput || fallbackCover;
+      const descriptionText = gameInfo || 'Adicionado manualmente a biblioteca.';
+
+      const newGame = {
+        id: seed,
+        title: name,
+        platform: platformLabel,
+        platformKey,
+        progress: 0,
+        acquiredAt: acquired,
+        cover: resolvedCover,
+        banner: resolvedBanner,
+        description: descriptionText,
+        moreUrl: '#',
+        releaseDate: acquired,
+        publisher: '-',
+        genre: '-',
+        gallery: bannerInput ? [bannerInput] : []
+      };
+
+      games.unshift(newGame);
+      refreshFeatured();
+      renderList(games);
+      closeAddModal();
+    });
+  }
 }
 
 function init(){
   // usa o primeiro como destaque
   if (el('#featured') && el('#game-list')){
-    renderFeatured(games[0]);
+    refreshFeatured();
     renderList(games);
   }
   wireEvents();
