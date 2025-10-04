@@ -231,6 +231,9 @@ function closeDetails(){
 }
 
 function wireEvents(){
+  const appRoot = el('#app');
+  const menuBtn = el('#menu-toggle');
+
   document.addEventListener('click', (e) => {
     const infoBtn = e.target.closest('[data-info]');
     if (infoBtn){
@@ -241,10 +244,34 @@ function wireEvents(){
     if (e.target.matches('[data-close]')){
       closeDetails();
     }
+
+    // toggle do menu hamburger
+    if (e.target.closest('#menu-toggle')){
+      const isOpen = appRoot.classList.toggle('menu-open');
+      if (menuBtn) menuBtn.setAttribute('aria-expanded', String(isOpen));
+      return;
+    }
+    // click fora fecha o menu
+    if (appRoot.classList.contains('menu-open')){
+      const insideMenu = e.target.closest('.ghc-menu');
+      if (!insideMenu) {
+        appRoot.classList.remove('menu-open');
+        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
   });
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeDetails();
+    if (e.key === 'Escape'){
+      closeDetails();
+      // fecha menu via Esc
+      const appRoot = el('#app');
+      const menuBtn = el('#menu-toggle');
+      if (appRoot.classList.contains('menu-open')){
+        appRoot.classList.remove('menu-open');
+        if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+      }
+    }
   });
 }
 

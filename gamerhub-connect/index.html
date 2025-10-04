@@ -12,7 +12,7 @@
   <body>
     <div id="app">
       <header class="ghc-header">
-        <button class="icon-btn" aria-label="Menu">
+        <button id="menu-toggle" class="icon-btn" aria-label="Menu" aria-expanded="false" aria-controls="main-menu">
           <span class="icon-hamburger"></span>
         </button>
         <div class="brand">
@@ -20,6 +20,15 @@
           <div class="brand-sub">CONNECT</div>
         </div>
       </header>
+
+      <!-- Menu Hamburguer -->
+      <nav id="main-menu" class="ghc-menu" aria-label="Plataformas">
+        <ul class="platform-menu">
+          <li class="platform-item"><span class="dot dot-switch" aria-hidden="true"></span> NINTENDO SWITCH</li>
+          <li class="platform-item"><span class="dot dot-ps" aria-hidden="true"></span> PLAYSTATION 4</li>
+          <li class="platform-item"><span class="dot dot-pc" aria-hidden="true"></span> PC</li>
+        </ul>
+      </nav>
 
       <!-- Destaque -->
       <section id="featured" class="featured" aria-label="Destaque">
