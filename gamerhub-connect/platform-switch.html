@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GamerHub Connect — Nintendo Switch</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app" class="platform-page">
+      <header class="ghc-header">
+        <button id="menu-toggle" class="icon-btn" aria-label="Menu" aria-expanded="false" aria-controls="main-menu">
+          <span class="icon-hamburger"></span>
+        </button>
+        <div class="brand">
+          <div class="brand-title">GamerHub</div>
+          <div class="brand-sub">CONNECT</div>
+        </div>
+      </header>
+
+      <nav id="main-menu" class="ghc-menu" aria-label="Plataformas">
+        <ul class="platform-menu">
+          <li class="platform-item">
+            <a class="platform-link" href="platform-switch.html" aria-current="page">
+              <span class="dot dot-switch" aria-hidden="true"></span>
+              NINTENDO SWITCH
+            </a>
+          </li>
+          <li class="platform-item">
+            <a class="platform-link" href="platform-ps4.html">
+              <span class="dot dot-ps" aria-hidden="true"></span>
+              PLAYSTATION 4
+            </a>
+          </li>
+          <li class="platform-item">
+            <a class="platform-link" href="platform-pc.html">
+              <span class="dot dot-pc" aria-hidden="true"></span>
+              PC
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <main class="content platform-content">
+        <h1 class="platform-title">Nintendo Switch</h1>
+        <p class="platform-description">
+          Acompanhe seus progressos em aventuras portateis ou no dock. Esta colecao destaca jogos perfeitos para o modo hibrido e lembra o que ainda falta concluir em cada jornada.
+        </p>
+
+        <section class="platform-section">
+          <h2 class="platform-heading">Jogos em destaque</h2>
+          <ul class="platform-list">
+            <li>
+              <span class="platform-label">Crash Bandicoot 4: It's About Time</span>
+              <span class="platform-meta">Plataforma - 45% concluido</span>
+            </li>
+            <li>
+              <span class="platform-label">Prince of Persia: The Lost Crown</span>
+              <span class="platform-meta">Metroidvania - 70% concluido</span>
+            </li>
+            <li>
+              <span class="platform-label">Dead Cells</span>
+              <span class="platform-meta">Roguelite - 80% concluido</span>
+            </li>
+          </ul>
+        </section>
+
+        <a class="btn-back" href="index.html"><span aria-hidden="true">&larr;</span> Voltar para biblioteca</a>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

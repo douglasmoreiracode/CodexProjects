@@ -192,9 +192,12 @@ function renderList(list){
 
 function openDetails(game){
   const modal = el('#details-modal');
+  if (!modal) return;
   modal.setAttribute('aria-hidden', 'false');
 
   const hero = el('#details-hero');
+  const gal = el('#details-gallery');
+  if (!hero || !gal) return;
   hero.innerHTML = `
     <img src="${game.banner}" alt="${game.title}"/>
     <div class="details-hero-overlay"></div>
@@ -206,7 +209,6 @@ function openDetails(game){
     <div id="details-acquired" class="details-acquired">Adquirido em: ${formatDate(game.acquiredAt)}</div>
   `;
 
-  const gal = el('#details-gallery');
   gal.innerHTML = '';
   game.gallery.forEach(src => {
     const d = document.createElement('div');
@@ -215,11 +217,16 @@ function openDetails(game){
     gal.appendChild(d);
   });
 
-  el('#details-description').textContent = game.description;
-  el('#details-more').href = game.moreUrl || '#';
-  el('#details-release').textContent = formatDate(game.releaseDate);
-  el('#details-publisher').textContent = game.publisher || '—';
-  el('#details-genre').textContent = game.genre || '—';
+  const desc = el('#details-description');
+  if (desc) desc.textContent = game.description;
+  const more = el('#details-more');
+  if (more) more.href = game.moreUrl || '#';
+  const release = el('#details-release');
+  if (release) release.textContent = formatDate(game.releaseDate);
+  const publisher = el('#details-publisher');
+  if (publisher) publisher.textContent = game.publisher || '-';
+  const genre = el('#details-genre');
+  if (genre) genre.textContent = game.genre || '-';
 
   // focus trap simples
   setTimeout(() => el('.modal-close').focus(), 50);
@@ -227,7 +234,7 @@ function openDetails(game){
 
 function closeDetails(){
   const modal = el('#details-modal');
-  modal.setAttribute('aria-hidden', 'true');
+  if (modal) modal.setAttribute('aria-hidden', 'true');
 }
 
 function wireEvents(){
@@ -246,13 +253,13 @@ function wireEvents(){
     }
 
     // toggle do menu hamburger
-    if (e.target.closest('#menu-toggle')){
+    if (menuBtn && appRoot && e.target.closest('#menu-toggle')){
       const isOpen = appRoot.classList.toggle('menu-open');
-      if (menuBtn) menuBtn.setAttribute('aria-expanded', String(isOpen));
+      menuBtn.setAttribute('aria-expanded', String(isOpen));
       return;
     }
     // click fora fecha o menu
-    if (appRoot.classList.contains('menu-open')){
+    if (appRoot && appRoot.classList.contains('menu-open')){
       const insideMenu = e.target.closest('.ghc-menu');
       if (!insideMenu) {
         appRoot.classList.remove('menu-open');
@@ -267,7 +274,7 @@ function wireEvents(){
       // fecha menu via Esc
       const appRoot = el('#app');
       const menuBtn = el('#menu-toggle');
-      if (appRoot.classList.contains('menu-open')){
+      if (appRoot && appRoot.classList.contains('menu-open')){
         appRoot.classList.remove('menu-open');
         if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
       }
@@ -277,8 +284,10 @@ function wireEvents(){
 
 function init(){
   // usa o primeiro como destaque
-  renderFeatured(games[0]);
-  renderList(games);
+  if (el('#featured') && el('#game-list')){
+    renderFeatured(games[0]);
+    renderList(games);
+  }
   wireEvents();
 }
 
