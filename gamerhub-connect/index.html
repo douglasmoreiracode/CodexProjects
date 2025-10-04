@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GamerHub Connect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="ghc-header">
+        <button class="icon-btn" aria-label="Menu">
+          <span class="icon-hamburger"></span>
+        </button>
+        <div class="brand">
+          <div class="brand-title">GamerHub</div>
+          <div class="brand-sub">CONNECT</div>
+        </div>
+      </header>
+
+      <!-- Destaque -->
+      <section id="featured" class="featured" aria-label="Destaque">
+        <!-- preenchido via JS -->
+      </section>
+
+      <main class="content">
+        <h2 class="section-title">ÚLTIMOS JOGOS</h2>
+        <ul id="game-list" class="game-list" aria-live="polite"></ul>
+      </main>
+    </div>
+
+    <!-- Modal Detalhes -->
+    <div id="details-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card" role="document">
+        <button class="icon-btn modal-close" data-close aria-label="Fechar">×</button>
+
+        <div class="details-hero" id="details-hero">
+          <div class="details-hero-overlay"></div>
+          <div class="details-hero-meta">
+            <span id="details-platform" class="badge">PLATAFORMA</span>
+            <span id="details-progress" class="progress-chip">0%<br /><small>PROGRESSO</small></span>
+          </div>
+          <h3 id="details-title" class="details-title">Título</h3>
+          <div id="details-acquired" class="details-acquired">Adquirido em: --/--/----</div>
+        </div>
+
+        <div class="details-body">
+          <div class="gallery" id="details-gallery" aria-label="Galeria"></div>
+
+          <section class="info-block">
+            <h4 class="info-title">INFORMAÇÕES DO JOGO</h4>
+            <p id="details-description" class="info-text">
+              —
+            </p>
+            <a id="details-more" class="link-more" href="#" target="_blank" rel="noopener">+ SAIBA MAIS</a>
+          </section>
+
+          <section class="info-block">
+            <h4 class="info-title">INFORMAÇÕES GERAIS</h4>
+            <div class="kv">
+              <div class="kv-row"><span>Data de lançamento:</span><span id="details-release">—</span></div>
+              <div class="kv-row"><span>Editor:</span><span id="details-publisher">—</span></div>
+              <div class="kv-row"><span>Gênero:</span><span id="details-genre">—</span></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+  </html>

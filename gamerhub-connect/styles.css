@@ -1,0 +1,109 @@
+:root{
+  --bg:#0b0b0d;
+  --bg-2:#101016;
+  --gradient: radial-gradient(120% 120% at 0% 0%, #1a1b28 0%, #0b0b0d 55%, #0b0b0d 100%);
+  --text:#f5f6f8;
+  --cor---texto---branca:#ffffff; /* alias para specs do Figma */
+  --font-family:"Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  --muted:#b7bbc7;
+  --divider:#262733;
+  --primary:#e63232; /* vermelho Switch */
+  --ps:#2c6df2;      /* azul PlayStation */
+  --pc:#00c48c;      /* verde PC */
+  --chip:#0d0d0f;
+  --chipText:#fff;
+  --radius-lg:22px;
+  --radius-md:16px;
+  --radius-sm:12px;
+  --shadow: 0 10px 30px rgba(0,0,0,.45);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  color:var(--text);
+  background:var(--gradient);
+  font-family: var(--font-family);
+  font-optical-sizing:auto; /* usa opsz da Inter variável */
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+
+#app{max-width: 480px; margin: 0 auto;}
+
+/* Header */
+.ghc-header{display:flex; align-items:center; gap:12px; padding:18px 16px; position:sticky; top:0; z-index:10; background:linear-gradient(180deg,#000 0%, rgba(0,0,0,.7) 60%, rgba(0,0,0,0) 100%)}
+.icon-btn{background:#1a1a1f; color:#fff; border:0; width:40px; height:40px; border-radius:12px; display:grid; place-items:center; box-shadow:var(--shadow);}
+.icon-btn:active{transform:translateY(1px)}
+.icon-hamburger{display:block; width:18px; height:2px; background:#fff; position:relative}
+.icon-hamburger::before,.icon-hamburger::after{content:""; position:absolute; left:0; width:100%; height:2px; background:#fff}
+.icon-hamburger::before{top:-6px}.icon-hamburger::after{top:6px}
+.brand{line-height:1}
+.brand-title{font-weight:800; letter-spacing:.2px}
+.brand-sub{font-size:12px; color:#c6c7d3; letter-spacing:.4em}
+
+/* Destaque */
+.featured{padding:0 16px 8px}
+.featured-card{position:relative; overflow:hidden; border-radius:28px; background:#111; box-shadow:var(--shadow)}
+.featured-img{width:100%; height:220px; object-fit:cover; display:block;}
+.featured-gradient{position:absolute; inset:auto 0 0 0; height:55%; background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(230,50,50,.85) 100%)}
+.featured-inner{position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; gap:10px; padding:16px}
+.badge{display:inline-flex; align-items:center; justify-content:center; border-radius:15px; padding:7px 14px; width:136px; height:21px; text-align:center; font-family:var(--font-family); font-weight:700; letter-spacing:.35em; font-size:8px; color:#fff; background:var(--primary); text-transform:uppercase}
+.badge.ps{background:var(--ps)}
+.badge.pc{background:var(--pc); color:#051410}
+.featured-title{font-family:var(--font-family); font-size:21px; font-weight:700; letter-spacing:-0.04em; margin:0; color:#fff}
+.featured-row{display:flex; align-items:center; justify-content:space-between; gap:8px}
+.btn{display:inline-flex; align-items:center; justify-content:center; padding:6px 15px; border-radius:15px; border:0; font-family:var(--font-family); font-weight:700; letter-spacing:.35em; font-size:8px; text-transform:uppercase}
+.btn-info{background:rgba(255,255,255,.6); color:#fff; width:132px; height:22px}
+.meta{color:var(--cor---texto---branca); font-weight:700; font-size:8px; letter-spacing:.04em}
+.progress-chip{background:#0b0b0d; color:var(--cor---texto---branca); border-radius:14px; padding:8px 10px; text-align:center; width:66px; box-shadow:var(--shadow); font-weight:700; font-size:16px; letter-spacing:-0.04em}
+.progress-chip small{display:block; font-weight:700; letter-spacing:.35em; font-size:8px; text-transform:uppercase; opacity:.95}
+
+/* Lista */
+.content{padding:4px 16px 80px}
+.section-title{letter-spacing:.5em; font-weight:700; font-size:14px; color:#e5e7ef; margin:14px 0 18px}
+.game-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:18px}
+.game-item{display:flex; gap:14px; padding-bottom:18px; border-bottom:1px solid var(--divider)}
+.thumb-wrap{position:relative; flex:0 0 110px}
+.thumb{width:110px; height:110px; border-radius:20px; object-fit:cover; display:block}
+.thumb-progress{position:absolute; left:8px; bottom:-8px; background:#0b0b0d; color:#fff; width:58px; height:58px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-weight:800; box-shadow:var(--shadow)}
+.thumb-progress small{position:absolute; bottom:-14px; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:.35em; color:#cfd3de}
+.game-info{flex:1; min-width:0}
+.game-title{margin:0 0 10px; font-size:21px; font-weight:700; letter-spacing:-0.04em}
+.pill-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.btn-ghost{background:rgba(255,255,255,.6); color:#fff; width:132px; height:22px}
+.acquired{margin-top:10px; color:var(--cor---texto---branca); font-size:8px; font-weight:700; letter-spacing:.04em}
+
+/* Modal */
+.modal{position:fixed; inset:0; display:none}
+.modal[aria-hidden="false"]{display:block}
+.modal-backdrop{position:absolute; inset:0; background:rgba(0,0,0,.55)}
+.modal-card{position:absolute; inset:8% 12px auto 12px; max-height:84%; overflow:auto; background:#0b0b0d; border-radius:24px; box-shadow:var(--shadow)}
+.modal-close{position:absolute; right:10px; top:10px; z-index:2; width:36px; height:36px; border-radius:10px; background:#191a1f; color:#fff; font-size:18px}
+.details-hero{position:relative; height:220px; border-top-left-radius:24px; border-top-right-radius:24px; overflow:hidden; background:#111}
+.details-hero img{width:100%; height:100%; object-fit:cover}
+.details-hero-overlay{position:absolute; inset:auto 0 0 0; height:55%; background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.4) 30%, rgba(230,50,50,.9) 100%)}
+.details-hero-meta{position:absolute; inset:12px 12px auto auto; display:flex; gap:10px; align-items:center}
+.details-title{position:absolute; left:16px; bottom:52px; margin:0; font-size:22px; font-weight:800}
+.details-acquired{position:absolute; left:16px; bottom:18px; font-size:12px; color:#fff}
+.details-body{padding:16px}
+.gallery{display:flex; gap:12px; overflow:auto; padding-bottom:6px}
+.gallery .g-item{flex:0 0 120px; height:90px; border-radius:16px; overflow:hidden; background:#16171d}
+.gallery img, .gallery video{width:100%; height:100%; object-fit:cover; display:block}
+.info-block{margin-top:18px; background:linear-gradient(180deg, rgba(255,255,255,.05) 0%, rgba(255,255,255,.02) 100%); border:1px solid rgba(255,255,255,.06); padding:14px; border-radius:18px}
+.info-title{margin:2px 0 12px; letter-spacing:.45em; font-size:13px; color:#e7e9f2}
+.info-text{margin:0 0 8px; color:#e9ebf3}
+.link-more{color:var(--primary); font-weight:700; text-decoration:none}
+.kv{display:flex; flex-direction:column; gap:10px}
+.kv-row{display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid rgba(255,255,255,.08); padding-top:10px}
+.kv-row:first-child{border-top:0; padding-top:0}
+
+/* Desktop touch-ups */
+@media (min-width: 780px){
+  #app{max-width: 900px}
+  .featured-img{height:280px}
+  .game-item{gap:18px}
+  .thumb{width:132px; height:132px}
+  .thumb-wrap{flex-basis:132px}
+  .game-title{font-size:28px}
+}
