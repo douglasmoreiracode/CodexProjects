@@ -52,9 +52,7 @@
       </nav>
 
       <!-- Destaque -->
-      <section id="featured" class="featured" aria-label="Destaque">
-        <!-- preenchido via JS -->
-      </section>
+      <section id="featured" class="featured" aria-label="Destaque"></section>
 
       <main class="content">
         <h2 class="section-title">ÚLTIMOS JOGOS</h2>
@@ -72,9 +70,9 @@
           <div class="details-hero-overlay"></div>
           <div class="details-hero-meta">
             <span id="details-platform" class="badge">PLATAFORMA</span>
-            <span id="details-progress" class="progress-chip">0%<br /><small>PROGRESSO</small></span>
+            <span id="details-progress" class="progress-chip">0%<button type="button" class="progress-link" data-progress-trigger data-id="">PROGRESSO</button></span>
           </div>
-          <h3 id="details-title" class="details-title">T��tulo</h3>
+          <h3 id="details-title" class="details-title">Título</h3>
           <div id="details-acquired" class="details-acquired">Adquirido em: --/--/----</div>
         </div>
 
@@ -83,18 +81,16 @@
 
           <section class="info-block">
             <h4 class="info-title">INFORMAÇÕES DO JOGO</h4>
-            <p id="details-description" class="info-text">
-              —
-            </p>
+            <p id="details-description" class="info-text"></p>
             <a id="details-more" class="link-more" href="#" target="_blank" rel="noopener">+ SAIBA MAIS</a>
           </section>
 
           <section class="info-block">
             <h4 class="info-title">INFORMAÇÕES GERAIS</h4>
             <div class="kv">
-              <div class="kv-row"><span>Data de lançamento:</span><span id="details-release">—</span></div>
-              <div class="kv-row"><span>Editor:</span><span id="details-publisher">—</span></div>
-              <div class="kv-row"><span>Gênero:</span><span id="details-genre">—</span></div>
+              <div class="kv-row"><span>Data de lançamento:</span><span id="details-release">--/--/----</span></div>
+              <div class="kv-row"><span>Editor:</span><span id="details-publisher">-</span></div>
+              <div class="kv-row"><span>Gênero:</span><span id="details-genre">-</span></div>
             </div>
           </section>
         </div>
@@ -152,6 +148,23 @@
           <div class="form-actions">
             <button type="button" class="btn-secondary" data-cancel-delete>Cancelar</button>
             <button type="button" class="btn-danger" data-confirm-delete>Excluir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Progresso -->
+    <div id="progress-modal" class="modal" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="modal-backdrop" data-close></div>
+      <div class="modal-card progress-modal" role="document">
+        <button class="icon-btn modal-close" data-close aria-label="Fechar edição">&times;</button>
+        <div class="progress-content">
+          <div class="progress-display" id="progress-display">0%</div>
+          <label class="progress-label" for="progress-input">Qual é o atual progresso?</label>
+          <input id="progress-input" class="progress-input" type="number" min="0" max="100" step="1" value="0" />
+          <div class="form-actions progress-actions">
+            <button type="button" class="btn-secondary" data-cancel-progress>Cancelar</button>
+            <button type="button" class="btn-primary" data-confirm-progress>Salvar</button>
           </div>
         </div>
       </div>

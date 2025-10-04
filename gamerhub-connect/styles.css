@@ -101,7 +101,9 @@ body{
 .btn-info{background:rgba(255,255,255,.6); color:#fff; min-height:24px}
 .meta{color:var(--cor---texto---branca); font-weight:700; font-size:8px; letter-spacing:.04em}
 .progress-chip{background:#0b0b0d; color:var(--cor---texto---branca); border-radius:14px; padding:8px 10px; text-align:center; width:66px; box-shadow:var(--shadow); font-weight:700; font-size:16px; letter-spacing:-0.04em}
-.progress-chip small{display:block; font-weight:700; letter-spacing:.35em; font-size:8px; text-transform:uppercase; opacity:.95}
+.progress-link{background:none; border:0; padding:0; margin:0; color:inherit; font:inherit; text-transform:uppercase; letter-spacing:.35em; cursor:pointer; line-height:1}
+.progress-link:focus-visible{outline:2px solid rgba(255,255,255,.4); outline-offset:2px}
+.progress-chip .progress-link{display:block; font-weight:700; font-size:8px; opacity:.95}
 
 /* Lista */
 .content{padding:4px 16px 80px}
@@ -115,7 +117,7 @@ body{
 .thumb-wrap{position:relative; flex:0 0 110px}
 .thumb{width:110px; height:110px; border-radius:20px; object-fit:cover; display:block}
 .thumb-progress{position:absolute; left:8px; bottom:-8px; background:#0b0b0d; color:#fff; width:58px; height:58px; border-radius:999px; display:flex; align-items:center; justify-content:center; font-weight:800; box-shadow:var(--shadow)}
-.thumb-progress small{position:absolute; bottom:-14px; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:.35em; color:#cfd3de}
+.thumb-progress .progress-link{position:absolute; bottom:-14px; left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:.35em; color:#cfd3de}
 .game-info{flex:1; min-width:0}
 .game-title{margin:0 0 10px; font-size:24px; font-weight:700; letter-spacing:-0.04em}
 .pill-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
@@ -135,6 +137,14 @@ body{
 .confirm-content{display:flex; flex-direction:column; gap:18px}
 .confirm-title{margin:0; font-size:20px; font-weight:700; letter-spacing:-0.015em; color:#fff}
 .confirm-text{margin:0; color:var(--muted); font-size:14px; line-height:1.6}
+.modal-card.progress-modal{left:50%; inset:20% auto auto 50%; transform:translateX(-50%); width:min(320px, calc(100% - 40px)); padding:32px 28px 30px; display:flex; flex-direction:column; align-items:center; gap:22px; text-align:center}
+.modal-card.progress-modal .modal-close{right:18px; top:18px}
+.progress-content{display:flex; flex-direction:column; align-items:center; gap:18px}
+.progress-display{width:90px; height:90px; border-radius:28px; background:rgba(24,24,30,.9); display:flex; align-items:center; justify-content:center; font-size:34px; font-weight:700}
+.progress-label{margin:0; color:var(--muted); font-size:15px; line-height:1.4}
+.progress-input{width:140px; text-align:center; background:#1a1b22; border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:12px 14px; color:#fff; font-size:20px; font-weight:700; letter-spacing:.08em}
+.progress-input:focus{outline:none; border-color:rgba(255,255,255,.22); box-shadow:0 0 0 3px rgba(255,255,255,.12)}
+.progress-actions{justify-content:center; width:100%; gap:16px}
 .add-form-title{margin:0; font-size:20px; font-weight:700; letter-spacing:-0.02em; color:#fff}
 .add-form{display:flex; flex-direction:column; gap:18px}
 .form-field{display:flex; flex-direction:column; gap:8px}

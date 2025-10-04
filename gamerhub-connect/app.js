@@ -1,5 +1,8 @@
+const STORAGE_KEY = 'ghc-games';
+const storageAvailable = typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+
 // Dados de exemplo (pode migrar para JSON/API depois)
-const games = [
+const defaultGames = [
   {
     id: "crash4",
     title: "Crash Bandicoot 4: It's About Time",
@@ -125,6 +128,58 @@ const games = [
   }
 ];
 
+function cloneGame(game){
+  return {
+    ...game,
+    gallery: Array.isArray(game.gallery) ? [...game.gallery] : []
+  };
+}
+
+function cloneDefaultGames(){
+  return defaultGames.map(cloneGame);
+}
+
+function loadGames(){
+  const fallback = cloneDefaultGames();
+  if (!storageAvailable) return fallback;
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored){
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed)) return parsed;
+    } else {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(fallback));
+      return fallback;
+    }
+  } catch (err) {
+    console.warn('GHC storage load falhou', err);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(fallback));
+    } catch (seedErr) {
+      console.warn('GHC storage seed falhou', seedErr);
+    }
+    return fallback;
+  }
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(fallback));
+  } catch (err) {
+    console.warn('GHC storage seed falhou', err);
+  }
+  return fallback;
+}
+
+function saveGames(){
+  if (!storageAvailable) return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
+  } catch (err) {
+    console.warn('GHC storage save falhou', err);
+  }
+}
+
+let games = loadGames();
+
 const el = (sel, ctx=document) => ctx.querySelector(sel);
 const elAll = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
 
@@ -159,7 +214,7 @@ function renderFeatured(game){
       <div class="featured-inner">
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <span class="${platformBadgeClass(game.platformKey)}">${game.platform.toUpperCase()}</span>
-          <span class="progress-chip">${game.progress}%<small>PROGRESSO</small></span>
+          <span class="progress-chip">${game.progress}%<button type="button" class="progress-link" data-progress-trigger data-id="${game.id}">PROGRESSO</button></span>
         </div>
         <h1 class="featured-title">${game.title}</h1>
         <div class="featured-row">
@@ -182,7 +237,7 @@ function renderList(list){
       <button class="card-delete" data-delete data-id="${g.id}" aria-label="Remover ${g.title}">&times;</button>
       <div class="thumb-wrap">
         <img class="thumb" src="${g.cover}" alt="${g.title}" />
-        <div class="thumb-progress">${g.progress}%<small>PROGRESSO</small></div>
+        <div class="thumb-progress">${g.progress}%<button type="button" class="progress-link" data-progress-trigger data-id="${g.id}">PROGRESSO</button></div>
       </div>
       <div class="game-info">
         <h3 class="game-title">${g.title}</h3>
@@ -209,6 +264,7 @@ function openDetails(game){
   const modal = el('#details-modal');
   if (!modal) return;
   modal.setAttribute('aria-hidden', 'false');
+  modal.dataset.targetId = game.id;
 
   const hero = el('#details-hero');
   const gal = el('#details-gallery');
@@ -218,7 +274,7 @@ function openDetails(game){
     <div class="details-hero-overlay"></div>
     <div class="details-hero-meta">
       <span id="details-platform" class="${platformBadgeClass(game.platformKey)}">${game.platform.toUpperCase()}</span>
-      <span id="details-progress" class="progress-chip">${game.progress}%<small>PROGRESSO</small></span>
+      <span id="details-progress" class="progress-chip">${game.progress}%<button type="button" class="progress-link" data-progress-trigger data-id="${game.id}">PROGRESSO</button></span>
     </div>
     <h3 id="details-title" class="details-title">${game.title}</h3>
     <div id="details-acquired" class="details-acquired">Adquirido em: ${formatDate(game.acquiredAt)}</div>
@@ -249,7 +305,10 @@ function openDetails(game){
 
 function closeDetails(){
   const modal = el('#details-modal');
-  if (modal) modal.setAttribute('aria-hidden', 'true');
+  if (modal){
+    modal.setAttribute('aria-hidden', 'true');
+    delete modal.dataset.targetId;
+  }
 }
 
 function openAddModal(){
@@ -292,6 +351,52 @@ function closeDeleteModal(){
   delete modal.dataset.targetId;
 }
 
+function openProgressModal(id){
+  const modal = el('#progress-modal');
+  if (!modal) return;
+  const game = games.find(g => g.id === id);
+  if (!game) return;
+  modal.dataset.targetId = id;
+  modal.setAttribute('aria-hidden', 'false');
+  const display = el('#progress-display', modal);
+  if (display) display.textContent = `${game.progress}%`;
+  const input = el('#progress-input', modal);
+  if (input){
+    input.value = game.progress;
+    setTimeout(() => {
+      input.focus();
+      input.select();
+    }, 50);
+  }
+}
+
+function closeProgressModal(){
+  const modal = el('#progress-modal');
+  if (!modal) return;
+  modal.setAttribute('aria-hidden', 'true');
+  delete modal.dataset.targetId;
+}
+
+function clampProgress(value){
+  const num = Number.parseInt(value, 10);
+  if (Number.isNaN(num)) return 0;
+  return Math.min(100, Math.max(0, num));
+}
+
+function updateProgressDisplay(value){
+  const modal = el('#progress-modal');
+  if (!modal) return;
+  const display = el('#progress-display', modal);
+  if (display) display.textContent = `${value}%`;
+}
+
+function updateDetailsIfOpen(game){
+  const modal = el('#details-modal');
+  if (!modal || modal.getAttribute('aria-hidden') === 'true') return;
+  if (modal.dataset.targetId !== game.id) return;
+  openDetails(game);
+}
+
 function wireEvents(){
   const appRoot = el('#app');
   const menuBtn = el('#menu-toggle');
@@ -310,6 +415,41 @@ function wireEvents(){
     const cancelAdd = e.target.closest('[data-cancel-add]');
     if (cancelAdd){
       closeAddModal();
+      return;
+    }
+
+    const progressTrigger = e.target.closest('[data-progress-trigger]');
+    if (progressTrigger){
+      const id = progressTrigger.getAttribute('data-id');
+      if (id) openProgressModal(id);
+      return;
+    }
+
+    const cancelProgress = e.target.closest('[data-cancel-progress]');
+    if (cancelProgress){
+      closeProgressModal();
+      return;
+    }
+
+    const confirmProgress = e.target.closest('[data-confirm-progress]');
+    if (confirmProgress){
+      const modal = el('#progress-modal');
+      const targetId = modal ? modal.dataset.targetId : null;
+      if (targetId){
+        const input = el('#progress-input', modal);
+        const nextValue = clampProgress(input ? input.value : 0);
+        if (input) input.value = nextValue;
+        updateProgressDisplay(nextValue);
+        const game = games.find(g => g.id === targetId);
+        if (game){
+          game.progress = nextValue;
+          saveGames();
+          refreshFeatured();
+          renderList(games);
+          updateDetailsIfOpen(game);
+        }
+      }
+      closeProgressModal();
       return;
     }
 
@@ -334,6 +474,7 @@ function wireEvents(){
         const idx = games.findIndex(g => g.id === targetId);
         if (idx >= 0){
           games.splice(idx, 1);
+          saveGames();
           refreshFeatured();
           renderList(games);
           closeDetails();
@@ -359,6 +500,7 @@ function wireEvents(){
       closeDetails();
       closeAddModal();
       closeDeleteModal();
+      closeProgressModal();
       return;
     }
 
@@ -383,6 +525,7 @@ function wireEvents(){
       closeDetails();
       closeAddModal();
       closeDeleteModal();
+      closeProgressModal();
       // fecha menu via Esc
       const appRoot = el('#app');
       const menuBtn = el('#menu-toggle');
@@ -437,11 +580,27 @@ function wireEvents(){
       };
 
       games.unshift(newGame);
+      saveGames();
       refreshFeatured();
       renderList(games);
       closeAddModal();
     });
   }
+
+  document.addEventListener('input', (e) => {
+    if (e.target.matches('#progress-input')){
+      const value = clampProgress(e.target.value);
+      updateProgressDisplay(value);
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.matches('#progress-input')){
+      e.preventDefault();
+      const confirmBtn = el('[data-confirm-progress]');
+      if (confirmBtn) confirmBtn.click();
+    }
+  });
 }
 
 function init(){
