@@ -265,6 +265,17 @@ function openDetails(game){
   if (!modal) return;
   modal.setAttribute('aria-hidden', 'false');
   modal.dataset.targetId = game.id;
+  if (document && document.body) {
+    document.body.setAttribute('data-theme', game.platformKey || 'switch');
+  }
+  // aplica cor de tema diretamente via CSS variable para suportar desktop
+  const rootStyle = document.documentElement && document.documentElement.style;
+  if (rootStyle){
+    let theme = '#e63232';
+    if (game.platformKey === 'ps') theme = '#2c6df2';
+    else if (game.platformKey === 'pc') theme = '#7a6cff';
+    rootStyle.setProperty('--theme-color', theme);
+  }
 
   const hero = el('#details-hero');
   const gal = el('#details-gallery');
@@ -308,6 +319,13 @@ function closeDetails(){
   if (modal){
     modal.setAttribute('aria-hidden', 'true');
     delete modal.dataset.targetId;
+  }
+  if (document && document.body) {
+    document.body.removeAttribute('data-theme');
+  }
+  const rootStyle = document.documentElement && document.documentElement.style;
+  if (rootStyle){
+    rootStyle.removeProperty('--theme-color');
   }
 }
 
