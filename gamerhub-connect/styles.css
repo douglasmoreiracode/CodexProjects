@@ -102,10 +102,10 @@ body[data-theme] .ghc-header::before{background:linear-gradient(180deg, var(--th
 .btn{display:inline-flex; align-items:center; justify-content:center; padding:6px 18px; border-radius:15px; border:0; font-family:var(--font-family); font-weight:700; letter-spacing:.3em; font-size:9px; text-transform:uppercase; white-space:nowrap}
 .btn-info{background:rgba(255,255,255,.6); color:#fff; min-height:24px}
 .meta{color:var(--cor---texto---branca); font-weight:700; font-size:8px; letter-spacing:.04em}
-.progress-chip{background:#0b0b0d; color:var(--cor---texto---branca); border-radius:14px; padding:8px 10px; text-align:center; width:66px; box-shadow:var(--shadow); font-weight:700; font-size:16px; letter-spacing:-0.04em}
+.progress-chip{background:#0b0b0d; color:var(--cor---texto---branca); border-radius:14px; padding:8px 10px; text-align:center; box-shadow:var(--shadow); font-weight:700; font-size:32px; letter-spacing:-0.04em}
 .progress-link{background:none; border:0; padding:0; margin:0; color:inherit; font:inherit; text-transform:uppercase; letter-spacing:.35em; cursor:pointer; line-height:1}
 .progress-link:focus-visible{outline:2px solid rgba(255,255,255,.4); outline-offset:2px}
-.progress-chip .progress-link{display:block; font-weight:700; font-size:8px; opacity:.95}
+.progress-chip .progress-link{display:block; font-weight:700; font-size:8px; text-align: center; opacity:.95}
 
 /* Lista */
 .content{padding:4px 16px 80px}
