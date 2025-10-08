@@ -170,7 +170,7 @@ body[data-theme] .ghc-header::before{background:linear-gradient(180deg, var(--th
 .details-hero img{width:100%; height:100%; object-fit:cover}
 .details-hero img{width:100%; height:100%; object-fit:cover}
 .details-hero-overlay{position:absolute; inset:auto 0 0 0; height:65%; background:linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.35) 35%, rgba(0,0,0,.65) 70%, rgba(0,0,0,.85) 100%), linear-gradient(180deg, transparent 0%, var(--theme-color) 100%)}
-.details-title{position:absolute; left:16px; bottom:52px; margin:0; font-size:22px; font-weight:800; font-size: 5rem;}
+.details-title{position:absolute; left:16px; bottom:52px; margin:0; font-size:22px; font-weight:800; font-size: 3rem;}
 .details-acquired{position:absolute; left:16px; bottom:18px; font-size:12px; color:#fff}
 .details-body{padding:16px}
 .gallery{display:flex; gap:12px; overflow:auto; padding-bottom:6px}
