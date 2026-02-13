@@ -12,6 +12,9 @@ const DAY_LABELS = {
   sexta: 'Sexta-feira'
 };
 
+const STORAGE_KEY = 'dashboard-todo-state-v1';
+const DEFAULT_AVATAR_SRC = 'https://i.pravatar.cc/160?img=12';
+
 function createTaskId() {
   if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') {
     return globalThis.crypto.randomUUID();
@@ -60,10 +63,76 @@ const totalTasksEl = document.getElementById('total-tasks');
 const counters = document.querySelectorAll('.counter-value');
 const toggleFormBtn = document.getElementById('toggle-form');
 const openFormBtn = document.getElementById('open-task-form');
+const saveProjectBtn = document.getElementById('save-project');
 const formEl = document.getElementById('task-form');
 const cancelFormBtn = document.getElementById('cancel-task');
 const avatarInput = document.getElementById('avatar-input');
 const avatarPreview = document.getElementById('avatar-preview');
+
+function sanitizeTask(task) {
+  if (!task || typeof task !== 'object') return null;
+
+  const status = ['todo', 'progress', 'done'].includes(task.status) ? task.status : 'todo';
+  const day = ['segunda', 'terca', 'quarta', 'quinta', 'sexta'].includes(task.day) ? task.day : 'segunda';
+  const start = typeof task.start === 'string' ? task.start : '';
+  const end = typeof task.end === 'string' ? task.end : '';
+  const title = typeof task.title === 'string' ? task.title.trim() : '';
+
+  if (!title || !start || !end) return null;
+
+  return {
+    id: typeof task.id === 'string' && task.id ? task.id : createTaskId(),
+    title,
+    status,
+    day,
+    start,
+    end
+  };
+}
+
+function loadSavedState() {
+  try {
+    const rawState = localStorage.getItem(STORAGE_KEY);
+    if (!rawState) return;
+
+    const parsedState = JSON.parse(rawState);
+    if (Array.isArray(parsedState.tasks)) {
+      const sanitizedTasks = parsedState.tasks
+        .map(sanitizeTask)
+        .filter(Boolean);
+
+      if (sanitizedTasks.length) {
+        tasks = sanitizedTasks;
+      }
+    }
+
+    if (typeof parsedState.avatarSrc === 'string' && parsedState.avatarSrc.trim()) {
+      avatarPreview.src = parsedState.avatarSrc;
+    }
+  } catch (error) {
+    console.warn('Não foi possível carregar o progresso salvo.', error);
+  }
+}
+
+function saveProjectState(showFeedback = false) {
+  try {
+    const state = {
+      tasks,
+      avatarSrc: avatarPreview?.src || DEFAULT_AVATAR_SRC,
+      updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+    if (showFeedback) {
+      saveProjectBtn.textContent = 'Salvo!';
+      setTimeout(() => {
+        saveProjectBtn.textContent = 'Salvar progresso';
+      }, 1500);
+    }
+  } catch (error) {
+    console.warn('Não foi possível salvar o progresso.', error);
+  }
+}
 
 function renderWeeklyCalendar() {
   const today = new Date();
@@ -237,6 +306,7 @@ formEl?.addEventListener('submit', (event) => {
   formEl.reset();
   toggleForm(false);
   updateDashboard();
+  saveProjectState();
 });
 
 cancelFormBtn?.addEventListener('click', () => {
@@ -255,6 +325,7 @@ agendaEl.addEventListener('change', (event) => {
 
   tasks = tasks.map((task) => (task.id === taskId ? { ...task, status: event.target.value } : task));
   updateDashboard();
+  saveProjectState();
 });
 
 avatarInput?.addEventListener('change', (event) => {
@@ -264,6 +335,7 @@ avatarInput?.addEventListener('change', (event) => {
   const reader = new FileReader();
   reader.onload = (e) => {
     avatarPreview.src = e.target?.result;
+    saveProjectState();
   };
   reader.readAsDataURL(file);
 });
@@ -340,6 +412,11 @@ toggleTimerBtn?.addEventListener('click', () => {
 
 resetTimerBtn?.addEventListener('click', resetTimer);
 
+saveProjectBtn?.addEventListener('click', () => {
+  saveProjectState(true);
+});
+
+loadSavedState();
 renderWeeklyCalendar();
 updateDashboard();
 updateTimerDisplay();

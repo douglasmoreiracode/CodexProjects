@@ -58,6 +58,13 @@ body {
   font-size: 15px;
 }
 
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 .add-task-button {
   background: var(--primary);
   color: #fff;
@@ -510,6 +517,12 @@ select:focus {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
 
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
   .week-calendar {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
@@ -537,6 +550,11 @@ select:focus {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+  }
+
+  .header-actions {
+    width: 100%;
+    flex-wrap: wrap;
   }
 
   .span-2,
