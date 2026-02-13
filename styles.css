@@ -363,6 +363,24 @@ body {
   gap: 12px;
 }
 
+
+#toggle-timer {
+  width: 89px;
+  height: 38px;
+  border-radius: 12px;
+  background: #6366f1;
+  border: 0.5px solid #6366f1;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#reset-timer {
+  width: 89px;
+  height: 38px;
+  border-radius: 12px;
+}
+
 button {
   font-family: inherit;
 }
