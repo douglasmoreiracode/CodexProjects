@@ -65,8 +65,7 @@ const counters = document.querySelectorAll('.counter-value');
 const toggleFormBtn = document.getElementById('toggle-form');
 const openFormBtn = document.getElementById('open-task-form');
 const saveProjectBtn = document.getElementById('save-project');
-const darkModeBtn = document.getElementById('dark-mode-btn');
-const lightModeBtn = document.getElementById('light-mode-btn');
+const themeToggleIconBtn = document.getElementById('theme-toggle-icon');
 const formEl = document.getElementById('task-form');
 const cancelFormBtn = document.getElementById('cancel-task');
 const avatarInput = document.getElementById('avatar-input');
@@ -142,8 +141,12 @@ function setTheme(theme) {
   const normalizedTheme = theme === 'light' ? 'light' : 'dark';
   document.body.dataset.theme = normalizedTheme;
 
-  darkModeBtn?.classList.toggle('active', normalizedTheme === 'dark');
-  lightModeBtn?.classList.toggle('active', normalizedTheme === 'light');
+  if (themeToggleIconBtn) {
+    const nextTheme = normalizedTheme === 'dark' ? 'light' : 'dark';
+    themeToggleIconBtn.dataset.nextTheme = nextTheme;
+    themeToggleIconBtn.setAttribute('aria-label', `Ativar ${nextTheme} mode`);
+    themeToggleIconBtn.setAttribute('title', `Ativar ${nextTheme} mode`);
+  }
 
   try {
     localStorage.setItem(THEME_STORAGE_KEY, normalizedTheme);
@@ -523,8 +526,10 @@ saveProjectBtn?.addEventListener('click', async () => {
   }
 });
 
-darkModeBtn?.addEventListener('click', () => setTheme('dark'));
-lightModeBtn?.addEventListener('click', () => setTheme('light'));
+themeToggleIconBtn?.addEventListener('click', () => {
+  const currentTheme = document.body.dataset.theme === 'light' ? 'light' : 'dark';
+  setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+});
 
 loadThemePreference();
 loadSavedState();

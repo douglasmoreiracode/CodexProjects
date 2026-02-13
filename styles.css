@@ -58,45 +58,21 @@ body {
   justify-content: flex-end;
 }
 
-.theme-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.theme-mode-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 310px;
-  border-radius: 999px;
-  padding: 14px 28px;
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
+.theme-icon-btn {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
   border: 2px solid #6366f1;
-  color: #6366f1;
   background: transparent;
+  color: #6366f1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
 }
 
-.theme-mode-btn .theme-icon {
-  font-size: 28px;
+.theme-icon-btn .theme-icon {
+  font-size: 42px;
   line-height: 1;
-}
-
-.theme-mode-btn.active {
-  background: linear-gradient(135deg, #6366f1, #5b5fe6);
-  color: #fff;
-}
-
-body[data-theme='light'] .theme-mode-btn[data-theme='light'] {
-  background: linear-gradient(135deg, #6366f1, #5b5fe6);
-  color: #fff;
-}
-
-body[data-theme='light'] .theme-mode-btn[data-theme='dark'] {
-  background: transparent;
-  color: #6366f1;
 }
 
 .header {
@@ -222,29 +198,36 @@ body[data-theme='light'] .theme-mode-btn[data-theme='dark'] {
 
 .counter-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.counter-item {
-  background: #e8e9f2;
-  padding: 18px 14px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: repeat(3, 61px);
   gap: 8px;
 }
 
+.counter-item {
+  width: 61px;
+  height: 100px;
+  border-radius: 12px;
+  background: linear-gradient(rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0) 100%);
+  padding: 14px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .counter-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  text-align: left;
   color: #6b7280;
-  font-size: 30px;
-  font-weight: 500;
+  line-height: 1.25;
 }
 
 .counter-value {
-  font-size: 46px;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
-  color: #1f2937;
+  font-size: 24px;
+  text-align: left;
+  color: #1f2933;
   line-height: 1;
 }
 
@@ -583,7 +566,7 @@ select:focus {
   }
 
   .counter-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(3, 61px);
   }
 
   .header {
@@ -626,10 +609,13 @@ select:focus {
     flex-wrap: wrap;
   }
 
-  .theme-mode-btn {
-    min-width: 100%;
-    font-size: 16px;
-    padding: 12px 18px;
+  .theme-icon-btn {
+    width: 66px;
+    height: 66px;
+  }
+
+  .theme-icon-btn .theme-icon {
+    font-size: 34px;
   }
 
   .span-2,
