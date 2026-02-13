@@ -12,13 +12,33 @@ const DAY_LABELS = {
   sexta: 'Sexta-feira'
 };
 
+function createTaskId() {
+  if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') {
+    return globalThis.crypto.randomUUID();
+  }
+
+  return `task-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function escapeHtml(text) {
+  const replacements = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  };
+
+  return String(text).replace(/[&<>"']/g, (char) => replacements[char]);
+}
+
 const initialTasks = [
-  { id: crypto.randomUUID(), title: 'Planejar sprint', status: 'todo', day: 'segunda', start: '09:00', end: '10:30' },
-  { id: crypto.randomUUID(), title: 'Reunião com equipe', status: 'progress', day: 'segunda', start: '11:00', end: '12:00' },
-  { id: crypto.randomUUID(), title: 'Desenvolver feature', status: 'progress', day: 'terca', start: '13:30', end: '16:00' },
-  { id: crypto.randomUUID(), title: 'Revisão de código', status: 'todo', day: 'quarta', start: '09:30', end: '11:00' },
-  { id: crypto.randomUUID(), title: 'Testes automatizados', status: 'done', day: 'quinta', start: '10:00', end: '12:00' },
-  { id: crypto.randomUUID(), title: 'Retrospectiva', status: 'done', day: 'sexta', start: '15:00', end: '16:00' }
+  { id: createTaskId(), title: 'Planejar sprint', status: 'todo', day: 'segunda', start: '09:00', end: '10:30' },
+  { id: createTaskId(), title: 'Reunião com equipe', status: 'progress', day: 'segunda', start: '11:00', end: '12:00' },
+  { id: createTaskId(), title: 'Desenvolver feature', status: 'progress', day: 'terca', start: '13:30', end: '16:00' },
+  { id: createTaskId(), title: 'Revisão de código', status: 'todo', day: 'quarta', start: '09:30', end: '11:00' },
+  { id: createTaskId(), title: 'Testes automatizados', status: 'done', day: 'quinta', start: '10:00', end: '12:00' },
+  { id: createTaskId(), title: 'Retrospectiva', status: 'done', day: 'sexta', start: '15:00', end: '16:00' }
 ];
 
 let tasks = [...initialTasks];
@@ -164,7 +184,7 @@ function renderAgenda() {
           (task) => `
             <div class="task-item" data-id="${task.id}">
               <div>
-                <p class="task-name">${task.title}</p>
+                <p class="task-name">${escapeHtml(task.title)}</p>
                 <p class="task-time">${task.start} - ${task.end}</p>
               </div>
               <span class="task-time">${STATUS_INFO[task.status].label}</span>
@@ -213,7 +233,7 @@ formEl?.addEventListener('submit', (event) => {
 
   if (!title || !start || !end) return;
 
-  tasks.push({ id: crypto.randomUUID(), title, status, day, start, end });
+  tasks.push({ id: createTaskId(), title, status, day, start, end });
   formEl.reset();
   toggleForm(false);
   updateDashboard();
