@@ -65,7 +65,8 @@ const counters = document.querySelectorAll('.counter-value');
 const toggleFormBtn = document.getElementById('toggle-form');
 const openFormBtn = document.getElementById('open-task-form');
 const saveProjectBtn = document.getElementById('save-project');
-const themeToggle = document.getElementById('theme-toggle');
+const darkModeBtn = document.getElementById('dark-mode-btn');
+const lightModeBtn = document.getElementById('light-mode-btn');
 const formEl = document.getElementById('task-form');
 const cancelFormBtn = document.getElementById('cancel-task');
 const avatarInput = document.getElementById('avatar-input');
@@ -137,14 +138,15 @@ function saveProjectState(showFeedback = false) {
 }
 
 
-function setTheme(isLight) {
-  document.body.dataset.theme = isLight ? 'light' : 'dark';
-  if (themeToggle) {
-    themeToggle.checked = isLight;
-  }
+function setTheme(theme) {
+  const normalizedTheme = theme === 'light' ? 'light' : 'dark';
+  document.body.dataset.theme = normalizedTheme;
+
+  darkModeBtn?.classList.toggle('active', normalizedTheme === 'dark');
+  lightModeBtn?.classList.toggle('active', normalizedTheme === 'light');
 
   try {
-    localStorage.setItem(THEME_STORAGE_KEY, isLight ? 'light' : 'dark');
+    localStorage.setItem(THEME_STORAGE_KEY, normalizedTheme);
   } catch (error) {
     console.warn('Não foi possível salvar o tema.', error);
   }
@@ -153,10 +155,35 @@ function setTheme(isLight) {
 function loadThemePreference() {
   try {
     const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    const isLight = storedTheme !== 'dark';
-    setTheme(isLight);
+    setTheme(storedTheme === 'light' ? 'light' : 'dark');
   } catch (error) {
-    setTheme(true);
+    setTheme('dark');
+  }
+}
+
+async function writeLogsToFolder() {
+  if (!('showDirectoryPicker' in window)) {
+    return false;
+  }
+
+  try {
+    const rootHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+    const logsHandle = await rootHandle.getDirectoryHandle('Logs', { create: true });
+
+    const reportFile = await logsHandle.getFileHandle('progresso-atual.txt', { create: true });
+    const reportWriter = await reportFile.createWritable();
+    await reportWriter.write(createProgressReport());
+    await reportWriter.close();
+
+    const stateFile = await logsHandle.getFileHandle('estado-dashboard.json', { create: true });
+    const stateWriter = await stateFile.createWritable();
+    await stateWriter.write(JSON.stringify({ tasks, avatarSrc: avatarPreview?.src || DEFAULT_AVATAR_SRC, updatedAt: new Date().toISOString() }, null, 2));
+    await stateWriter.close();
+
+    return true;
+  } catch (error) {
+    console.warn('Não foi possível criar a pasta Logs automaticamente.', error);
+    return false;
   }
 }
 
@@ -488,14 +515,16 @@ toggleTimerBtn?.addEventListener('click', () => {
 
 resetTimerBtn?.addEventListener('click', resetTimer);
 
-saveProjectBtn?.addEventListener('click', () => {
+saveProjectBtn?.addEventListener('click', async () => {
   saveProjectState(true);
-  downloadProgressReport();
+  const wroteLogs = await writeLogsToFolder();
+  if (!wroteLogs) {
+    downloadProgressReport();
+  }
 });
 
-themeToggle?.addEventListener('change', (event) => {
-  setTheme(event.target.checked);
-});
+darkModeBtn?.addEventListener('click', () => setTheme('dark'));
+lightModeBtn?.addEventListener('click', () => setTheme('light'));
 
 loadThemePreference();
 loadSavedState();
