@@ -59,8 +59,8 @@ body {
 }
 
 .theme-icon-btn {
-  width: 82px;
-  height: 82px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   border: 2px solid #6366f1;
   background: transparent;
@@ -71,7 +71,7 @@ body {
 }
 
 .theme-icon-btn .theme-icon {
-  font-size: 42px;
+  font-size: 20px;
   line-height: 1;
 }
 
@@ -198,20 +198,23 @@ body {
 
 .counter-grid {
   display: grid;
-  grid-template-columns: repeat(3, 61px);
+  grid-template-columns: 61px 89px 83px;
   gap: 8px;
 }
 
 .counter-item {
-  width: 61px;
   height: 100px;
   border-radius: 12px;
   background: linear-gradient(rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0) 100%);
-  padding: 14px 8px;
+  padding: 14px 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
+
+.counter-item:nth-child(1) { width: 61px; }
+.counter-item:nth-child(2) { width: 89px; }
+.counter-item:nth-child(3) { width: 83px; }
 
 .counter-label {
   font-family: 'Inter', sans-serif;
@@ -227,7 +230,7 @@ body {
   font-weight: 700;
   font-size: 24px;
   text-align: left;
-  color: #1f2933;
+  color: #6366f1;
   line-height: 1;
 }
 
@@ -566,7 +569,7 @@ select:focus {
   }
 
   .counter-grid {
-    grid-template-columns: repeat(3, 61px);
+    grid-template-columns: 61px 89px 83px;
   }
 
   .header {
@@ -610,12 +613,12 @@ select:focus {
   }
 
   .theme-icon-btn {
-    width: 66px;
-    height: 66px;
+    width: 38px;
+    height: 38px;
   }
 
   .theme-icon-btn .theme-icon {
-    font-size: 34px;
+    font-size: 20px;
   }
 
   .span-2,
