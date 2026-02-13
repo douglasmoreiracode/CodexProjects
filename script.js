@@ -13,6 +13,7 @@ const DAY_LABELS = {
 };
 
 const STORAGE_KEY = 'dashboard-todo-state-v1';
+const THEME_STORAGE_KEY = 'dashboard-theme-v1';
 const DEFAULT_AVATAR_SRC = 'https://i.pravatar.cc/160?img=12';
 
 function createTaskId() {
@@ -64,6 +65,7 @@ const counters = document.querySelectorAll('.counter-value');
 const toggleFormBtn = document.getElementById('toggle-form');
 const openFormBtn = document.getElementById('open-task-form');
 const saveProjectBtn = document.getElementById('save-project');
+const themeToggle = document.getElementById('theme-toggle');
 const formEl = document.getElementById('task-form');
 const cancelFormBtn = document.getElementById('cancel-task');
 const avatarInput = document.getElementById('avatar-input');
@@ -131,6 +133,80 @@ function saveProjectState(showFeedback = false) {
     }
   } catch (error) {
     console.warn('Não foi possível salvar o progresso.', error);
+  }
+}
+
+
+function setTheme(isLight) {
+  document.body.dataset.theme = isLight ? 'light' : 'dark';
+  if (themeToggle) {
+    themeToggle.checked = isLight;
+  }
+
+  try {
+    localStorage.setItem(THEME_STORAGE_KEY, isLight ? 'light' : 'dark');
+  } catch (error) {
+    console.warn('Não foi possível salvar o tema.', error);
+  }
+}
+
+function loadThemePreference() {
+  try {
+    const storedTheme = localStorage.getItem(THEME_STORAGE_KEY);
+    const isLight = storedTheme !== 'dark';
+    setTheme(isLight);
+  } catch (error) {
+    setTheme(true);
+  }
+}
+
+function createProgressReport() {
+  const lines = [
+    'Relatório de progresso - Dashboard To Do',
+    `Gerado em: ${new Date().toLocaleString('pt-BR')}`,
+    '',
+    `Total de tarefas: ${tasks.length}`,
+    ''
+  ];
+
+  const dayOrder = ['segunda', 'terca', 'quarta', 'quinta', 'sexta'];
+  dayOrder.forEach((dayKey) => {
+    lines.push(`${formatLabel(dayKey)}:`);
+    const dayTasks = tasks
+      .filter((task) => task.day === dayKey)
+      .sort((a, b) => a.start.localeCompare(b.start));
+
+    if (!dayTasks.length) {
+      lines.push('- Sem tarefas');
+      lines.push('');
+      return;
+    }
+
+    dayTasks.forEach((task) => {
+      lines.push(`- ${task.start}-${task.end} | ${task.title} | ${STATUS_INFO[task.status].label}`);
+    });
+    lines.push('');
+  });
+
+  return lines.join('\n');
+}
+
+function downloadProgressReport() {
+  try {
+    const reportContent = createProgressReport();
+    const now = new Date();
+    const dateTag = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `progresso-tarefas-${dateTag}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.warn('Não foi possível exportar o relatório em .txt.', error);
   }
 }
 
@@ -414,8 +490,14 @@ resetTimerBtn?.addEventListener('click', resetTimer);
 
 saveProjectBtn?.addEventListener('click', () => {
   saveProjectState(true);
+  downloadProgressReport();
 });
 
+themeToggle?.addEventListener('change', (event) => {
+  setTheme(event.target.checked);
+});
+
+loadThemePreference();
 loadSavedState();
 renderWeeklyCalendar();
 updateDashboard();
