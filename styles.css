@@ -299,6 +299,20 @@ body[data-theme='dark'] #dashboard-accordion .accordion-header .ghost {
   order: 0;
 }
 
+/* Force icon + title aligned left for both themes */
+#dashboard-accordion .accordion-header {
+  justify-content: flex-start;
+}
+
+#dashboard-accordion .accordion-header .ghost {
+  order: -1;
+  margin-right: 16px;
+}
+
+#dashboard-accordion .accordion-header h2 {
+  margin: 0;
+}
+
 @media (max-width: 900px) {
   .inner-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
