@@ -508,6 +508,98 @@ function resetTimer() {
   updateTimerDisplay();
 }
 
+function exportProgress() {
+  try {
+    const state = {
+      tasks,
+      avatarSrc: avatarPreview?.src || DEFAULT_AVATAR_SRC,
+      updatedAt: new Date().toISOString()
+    };
+    
+    const jsonString = JSON.stringify(state, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    const now = new Date();
+    const dateTag = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
+    
+    link.href = url;
+    link.download = `progresso-dashboard-${dateTag}.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    
+    // Feedback visual
+    const exportBtn = document.getElementById('export-progress');
+    if (exportBtn) {
+      const originalText = exportBtn.textContent;
+      exportBtn.textContent = 'Exportado!';
+      setTimeout(() => {
+        exportBtn.textContent = originalText;
+      }, 1500);
+    }
+  } catch (error) {
+    console.warn('Não foi possível exportar o progresso.', error);
+    alert('Erro ao exportar progresso. Verifique o console para mais detalhes.');
+  }
+}
+
+function loadProgress(file) {
+  try {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target.result;
+        const state = JSON.parse(content);
+        
+        if (!state.tasks || !Array.isArray(state.tasks)) {
+          throw new Error('Arquivo inválido: não contém um array de tarefas');
+        }
+        
+        // Sanitizar e carregar tarefas
+        const sanitizedTasks = state.tasks
+          .map(sanitizeTask)
+          .filter(Boolean);
+        
+        if (sanitizedTasks.length > 0) {
+          tasks = sanitizedTasks;
+        } else {
+          throw new Error('Nenhuma tarefa válida encontrada no arquivo');
+        }
+        
+        // Carregar avatar se disponível
+        if (typeof state.avatarSrc === 'string' && state.avatarSrc.trim()) {
+          avatarPreview.src = state.avatarSrc;
+        }
+        
+        // Salvar estado e atualizar dashboard
+        saveProjectState(false);
+        updateDashboard();
+        renderWeeklyCalendar();
+        
+        // Feedback visual
+        const loadBtn = document.getElementById('load-progress');
+        if (loadBtn) {
+          const originalText = loadBtn.textContent;
+          loadBtn.textContent = 'Carregado!';
+          setTimeout(() => {
+            loadBtn.textContent = originalText;
+          }, 1500);
+        }
+      } catch (error) {
+        console.error('Erro ao processar arquivo:', error);
+        alert(`Erro ao carregar progresso: ${error.message}`);
+      }
+    };
+    reader.readAsText(file);
+  } catch (error) {
+    console.warn('Não foi possível carregar o progresso.', error);
+    alert('Erro ao carregar progresso. Verifique se o arquivo é válido.');
+  }
+}
+
 toggleTimerBtn?.addEventListener('click', () => {
   if (timerInterval) {
     pauseTimer();
@@ -530,6 +622,37 @@ themeToggleIconBtn?.addEventListener('click', () => {
   const currentTheme = document.body.dataset.theme === 'light' ? 'light' : 'dark';
   setTheme(currentTheme === 'dark' ? 'light' : 'dark');
 });
+
+const exportProgressBtn = document.getElementById('export-progress');
+exportProgressBtn?.addEventListener('click', exportProgress);
+
+const loadProgressBtn = document.getElementById('load-progress');
+const fileInputLoad = document.getElementById('file-input-load');
+
+loadProgressBtn?.addEventListener('click', () => {
+  fileInputLoad.click();
+});
+
+fileInputLoad?.addEventListener('change', (event) => {
+  const file = event.target.files?.[0];
+  if (file) {
+    loadProgress(file);
+    fileInputLoad.value = '';
+  }
+});
+
+// Dashboard accordion toggle
+const dashboardToggleBtn = document.getElementById('dashboard-accordion-toggle');
+const dashboardPanel = document.getElementById('dashboard-accordion-panel');
+if (dashboardToggleBtn && dashboardPanel) {
+  // ensure initial state
+  dashboardPanel.hidden = dashboardToggleBtn.getAttribute('aria-expanded') !== 'true';
+  dashboardToggleBtn.addEventListener('click', () => {
+    const expanded = dashboardToggleBtn.getAttribute('aria-expanded') === 'true';
+    dashboardToggleBtn.setAttribute('aria-expanded', String(!expanded));
+    dashboardPanel.hidden = expanded;
+  });
+}
 
 loadThemePreference();
 loadSavedState();

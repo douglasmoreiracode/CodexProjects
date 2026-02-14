@@ -22,65 +22,82 @@
 
       <header class="header">
         <div>
-          <h1>Bem-vindo, Douglas!</h1>
+          <h1>Bem-vindo!</h1>
           <p class="subtitle">Organize seu dia e acompanhe o progresso das suas tarefas.</p>
         </div>
         <div class="header-actions">
-          <button class="ghost" type="button" id="save-project">Salvar progresso</button>
+          
+        
+          <button class="ghost" type="button" id="export-progress">Exportar progresso</button>
+          <button class="ghost" type="button" id="load-progress">Carregar progresso</button>
+          <input type="file" id="file-input-load" accept=".json" style="display: none;" />
           <button class="add-task-button" type="button" id="open-task-form">+ Nova tarefa</button>
         </div>
       </header>
 
       <section class="grid">
-        <div class="card span-2" id="status-bars-card">
-          <header class="card-header">
-            <h2>Status das tarefas</h2>
-            <span class="card-caption">Distribuição por percentual</span>
+        <div class="card span-4" id="dashboard-accordion">
+          <header class="card-header accordion-header">
+            <h2 id="dashboard-accordion-title">Dashboard</h2>
+            <button type="button" class="ghost" id="dashboard-accordion-toggle" aria-expanded="true" aria-controls="dashboard-accordion-panel">Alternar</button>
           </header>
-          <div class="progress-list" id="progress-bars"></div>
-        </div>
+          <div id="dashboard-accordion-panel" class="accordion-panel">
+            <div class="inner-grid">
+              <div class="card span-2" id="status-bars-card">
+                <header class="card-header">
+                  <h2>Status das tarefas</h2>
+                  <span class="card-caption">Distribuição por percentual</span>
+                </header>
+                <div class="progress-list" id="progress-bars"></div>
+              </div>
 
-        <div class="card" id="task-counters-card">
-          <header class="card-header">
-            <h2>Contagem de tarefas</h2>
-            <span class="card-caption">Atualiza conforme os status</span>
-          </header>
-          <div class="counter-grid">
-            <div class="counter-item">
-              <span class="counter-label">A Fazer</span>
-              <span class="counter-value" data-status="todo">0</span>
-            </div>
-            <div class="counter-item">
-              <span class="counter-label">Progredindo</span>
-              <span class="counter-value" data-status="progress">0</span>
-            </div>
-            <div class="counter-item">
-              <span class="counter-label">Concluídas</span>
-              <span class="counter-value" data-status="done">0</span>
+              <div class="card" id="task-counters-card">
+                <header class="card-header">
+                  <h2>Contagem de tarefas</h2>
+                  <span class="card-caption">Atualiza conforme os status</span>
+                </header>
+                <div class="counter-grid">
+                  <div class="counter-item">
+                    <span class="counter-label">A Fazer</span>
+                    <span class="counter-value" data-status="todo">0</span>
+                  </div>
+                  <div class="counter-item">
+                    <span class="counter-label">Progredindo</span>
+                    <span class="counter-value" data-status="progress">0</span>
+                  </div>
+                  <div class="counter-item">
+                    <span class="counter-label">Concluídas</span>
+                    <span class="counter-value" data-status="done">0</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card" id="weekly-calendar-card">
+                <header class="card-header">
+                  <h2>Horas na semana</h2>
+                  <span class="card-caption">Acompanhe a distribuição diária</span>
+                </header>
+                <div class="week-calendar" id="weekly-calendar"></div>
+              </div>
+
+              <div class="card span-2" id="percent-card">
+                <header class="card-header">
+                  <h2>Percentual geral</h2>
+                  <span class="card-caption">Resumo dos estados das tarefas</span>
+                </header>
+                <div class="percent-wrapper">
+                  <div class="donut" id="status-donut">
+                    <div class="donut-center">
+                      <span>Total</span>
+                      <strong id="total-tasks">0</strong>
+                      <small>tarefas</small>
+                    </div>
+                  </div>
+                  <ul class="legend" id="percent-legend"></ul>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="card" id="avatar-card">
-          <header class="card-header">
-            <h2>Perfil</h2>
-            <span class="card-caption">Personalize com sua foto</span>
-          </header>
-          <div class="avatar-wrapper">
-            <label for="avatar-input" class="avatar-upload">
-              <img id="avatar-preview" src="https://i.pravatar.cc/160?img=12" alt="Avatar do usuário" />
-              <span>Atualizar foto</span>
-            </label>
-            <input type="file" id="avatar-input" accept="image/*" />
-          </div>
-        </div>
-
-        <div class="card" id="weekly-calendar-card">
-          <header class="card-header">
-            <h2>Horas na semana</h2>
-            <span class="card-caption">Acompanhe a distribuição diária</span>
-          </header>
-          <div class="week-calendar" id="weekly-calendar"></div>
         </div>
 
         <div class="card" id="pomodoro-card">
@@ -106,22 +123,7 @@
           </div>
         </div>
 
-        <div class="card span-2" id="percent-card">
-          <header class="card-header">
-            <h2>Percentual geral</h2>
-            <span class="card-caption">Resumo dos estados das tarefas</span>
-          </header>
-          <div class="percent-wrapper">
-            <div class="donut" id="status-donut">
-              <div class="donut-center">
-                <span>Total</span>
-                <strong id="total-tasks">0</strong>
-                <small>tarefas</small>
-              </div>
-            </div>
-            <ul class="legend" id="percent-legend"></ul>
-          </div>
-        </div>
+        
 
         <div class="card span-4" id="agenda-card">
           <header class="card-header">

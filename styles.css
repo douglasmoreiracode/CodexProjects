@@ -56,6 +56,7 @@ body {
 .top-controls {
   display: flex;
   justify-content: flex-end;
+  margin-top: -1rem;
 }
 
 .theme-icon-btn {
@@ -83,6 +84,7 @@ body {
   padding: 28px 32px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
+  margin-top: -1rem;
 }
 
 .header h1 {
@@ -154,6 +156,40 @@ body {
 
 .span-4 {
   grid-column: span 4;
+}
+
+/* Accordion Dashboard */
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.accordion-panel {
+  margin-top: 8px;
+}
+
+.accordion-panel[hidden] {
+  display: none;
+}
+
+.inner-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .inner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .inner-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .progress-list {
@@ -228,7 +264,7 @@ body {
 .counter-value {
   font-family: 'Inter', sans-serif;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 18px;
   text-align: left;
   color: #6366f1;
   line-height: 1;
@@ -522,139 +558,131 @@ select:focus {
 }
 
 .agenda {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(230px, 1fr));
-  gap: 16px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
   overflow-x: auto;
-  padding-bottom: 6px;
+  padding: 12px 6px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
 }
 
+/* Cada dia como coluna fixa (permite rolagem horizontal) */
 .agenda-day {
-  background: rgba(15, 23, 42, 0.04);
-  border-radius: var(--radius-md);
-  padding: 16px;
+  flex: 0 0 260px;
+  min-width: 220px;
+  scroll-snap-align: start;
+  padding: 12px;
+  border-radius: 12px;
+}
+
+/* Cabeçalho do dia */
+.agenda-day > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Itens de tarefa */
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+/* Melhor aparência da barra de rolagem (opcional) */
+.agenda::-webkit-scrollbar { height: 10px; }
+.agenda::-webkit-scrollbar-track { background: transparent; }
+.agenda::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Em telas largas, trocar para grid com as 5 colunas (sem rolagem) */
+@media (min-width: 1100px) {
+  .agenda {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 28px;
+    overflow: visible;
+    padding: 0;
+  }
+  .agenda-day {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 16px;
+  }
+}
+
+/* Agenda: layout organizado em colunas responsivas */
+.agenda {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(160px, 1fr));
+  gap: 22px;
+  align-items: start;
+  overflow: visible;
+  padding: 0;
+}
+
+/* Cada dia como coluna */
+.agenda-day {
+  padding: 12px;
+  border-radius: 12px;
+  min-width: 0;
+}
+
+/* Cabeçalho do dia */
+.agenda-day > header {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
+  margin-bottom: 12px;
 }
 
-.agenda-day header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.agenda-day header h3 {
-  font-size: 16px;
-}
-
-.agenda-day header span {
-  font-size: 12px;
-  color: var(--muted);
-}
-
+/* Itens de tarefa: empilhar conteúdo para evitar sobreposição */
 .task-item {
-  display: grid;
-  grid-template-columns: 1fr 140px 110px;
-  gap: 12px;
-  align-items: center;
-  background: var(--card-bg);
-  padding: 12px 14px;
-  border-radius: var(--radius-sm);
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  align-items: flex-start;
+  width: 100%;
 }
 
-.task-name {
-  font-weight: 600;
+/* Nome e horário ficam juntos à esquerda */
+.task-item > div {
+  max-width: 100%;
 }
 
-.task-time {
-  font-size: 13px;
-  color: var(--muted);
+/* Select de status menor e alinhado sem quebrar layout */
+.task-status-select {
+  min-width: 140px;
+  max-width: 100%;
 }
 
-.task-item select {
-  border-radius: var(--radius-sm);
-}
-
-@media (max-width: 1100px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .span-4 {
-    grid-column: span 2;
-  }
-
-  .counter-grid {
-    grid-template-columns: 61px 89px 83px;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .week-calendar {
-    grid-template-columns: 1fr;
-  }
-
-  .progress-item {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  .progress-value {
-    text-align: left;
-  }
-}
-
-@media (max-width: 720px) {
-  body {
-    padding: 24px 16px 64px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
-  .header-actions {
-    width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .theme-icon-btn {
-    width: 38px;
-    height: 38px;
-  }
-
-  .theme-icon-btn .theme-icon {
-    font-size: 20px;
-  }
-
-  .span-2,
-  .span-4 {
-    grid-column: span 1;
-  }
-
+/* Scroll horizontal em telas pequenas */
+@media (max-width: 1099px) {
   .agenda {
-    grid-template-columns: 1fr;
+    display: flex;
+    gap: 18px;
+    padding: 12px 6px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .task-item {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    align-items: flex-start;
+  .agenda-day {
+    flex: 0 0 260px;
+    min-width: 220px;
+    scroll-snap-align: start;
+    padding: 12px;
   }
 
-  .task-item select {
-    width: 100%;
-  }
+  .task-status-select { min-width: 120px; }
 }
