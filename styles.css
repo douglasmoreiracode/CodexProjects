@@ -184,7 +184,7 @@ body {
 #dashboard-accordion .accordion-header {
   height: 65px;
   border-radius: 32.5px;
-  background: #161d33;
+  background: var(--accordion-bg);
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -234,6 +234,30 @@ body {
 /* Make the accordion header appear as a full-width pill inside the grid */
 #dashboard-accordion {
   padding: 10px 0 0 0; /* keep card padding but visually align header */
+}
+
+/* Light mode palette variables */
+body[data-theme='light'] {
+  --bg: #f3f6fb;
+  --card-bg: #ffffff;
+  --text: #0b1220;
+  --muted: #6b7280;
+  --primary: #4f46e5;
+  --primary-soft: rgba(79, 70, 229, 0.08);
+  --todo: #f97316;
+  --progress: #0ea5e9;
+  --done: #22c55e;
+  --border: rgba(2, 6, 23, 0.06);
+  --shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --accordion-bg: #0f1726; /* dark pill on light background */
+}
+
+/* Ensure we use a variable for accordion bg in dark theme too */
+body[data-theme='dark'] {
+  --accordion-bg: #161d33;
 }
 
 @media (max-width: 900px) {

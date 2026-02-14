@@ -645,12 +645,14 @@ fileInputLoad?.addEventListener('change', (event) => {
 const dashboardToggleBtn = document.getElementById('dashboard-accordion-toggle');
 const dashboardPanel = document.getElementById('dashboard-accordion-panel');
 if (dashboardToggleBtn && dashboardPanel) {
-  // ensure initial state
+  // initial state: respect aria-expanded attribute (button starts with "false")
   dashboardPanel.hidden = dashboardToggleBtn.getAttribute('aria-expanded') !== 'true';
+
   dashboardToggleBtn.addEventListener('click', () => {
     const expanded = dashboardToggleBtn.getAttribute('aria-expanded') === 'true';
+    // toggle attribute
     dashboardToggleBtn.setAttribute('aria-expanded', String(!expanded));
-    dashboardPanel.hidden = expanded;
+    dashboardPanel.hidden = !expanded ? false : true;
   });
 }
 
