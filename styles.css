@@ -252,12 +252,51 @@ body[data-theme='light'] {
   --radius-lg: 24px;
   --radius-md: 18px;
   --radius-sm: 12px;
-  --accordion-bg: #0f1726; /* dark pill on light background */
+  --accordion-bg: #ffffff; /* pill background in light mode */
 }
 
 /* Ensure we use a variable for accordion bg in dark theme too */
 body[data-theme='dark'] {
   --accordion-bg: #161d33;
+}
+
+/* Light-mode specific header visual (match protótipo) */
+body[data-theme='light'] #dashboard-accordion .accordion-header {
+  background: var(--accordion-bg);
+  box-shadow: 0 8px 20px rgba(11, 18, 32, 0.06);
+  height: 65px;
+  border-radius: 32.5px;
+  padding: 0 20px;
+  align-items: center;
+}
+
+body[data-theme='light'] #dashboard-accordion .accordion-header h2 {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 24px;
+}
+
+/* Move icon to the start visually in light mode */
+body[data-theme='light'] #dashboard-accordion .accordion-header .ghost {
+  order: -1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.12);
+}
+
+body[data-theme='light'] #dashboard-accordion .accordion-header .ghost svg {
+  color: #fff;
+}
+
+/* Keep dark-mode behavior unchanged */
+body[data-theme='dark'] #dashboard-accordion .accordion-header .ghost {
+  order: 0;
 }
 
 @media (max-width: 900px) {
