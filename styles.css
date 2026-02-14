@@ -718,10 +718,11 @@ select:focus {
 /* Cabeçalho do dia */
 .agenda-day > header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  flex-direction: column;
+  gap: 6px;
   margin-bottom: 12px;
+  border-bottom: 1px solid #595959ad;
+  padding-bottom: 1rem;
 }
 
 /* Itens de tarefa */
@@ -782,6 +783,8 @@ select:focus {
   flex-direction: column;
   gap: 6px;
   margin-bottom: 12px;
+  border-bottom: 1px solid #595959ad;
+  padding-bottom: 1rem;
 }
 
 /* Itens de tarefa: empilhar conteúdo para evitar sobreposição */
