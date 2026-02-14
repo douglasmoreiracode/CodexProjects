@@ -211,6 +211,24 @@ body {
   display: grid;
   place-items: center;
   padding: 0;
+  background: rgba(255,255,255,0.03);
+  transition: transform 0.22s ease, background 0.18s ease;
+}
+
+#dashboard-accordion .accordion-header .ghost svg {
+  display: block;
+  color: #ffffff;
+  transition: transform 0.22s ease;
+}
+
+/* rotate icon when expanded (show chevron pointing up -> collapse) */
+#dashboard-accordion .accordion-header .ghost[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* small left spacing between icon and title */
+.accordion-header h2 {
+  margin-left: 12px;
 }
 
 /* Make the accordion header appear as a full-width pill inside the grid */
