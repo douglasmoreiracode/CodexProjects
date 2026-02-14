@@ -95,7 +95,7 @@ body {
 .subtitle {
   margin-top: 8px;
   color: var(--muted);
-  font-size: 15px;
+  font-size: 18px;
 }
 
 
@@ -139,19 +139,24 @@ body {
 }
 
 .card-header h2 {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
 }
 
 .card-caption {
   display: block;
   margin-top: 4px;
-  font-size: 13px;
+  font-size: 16px;
   color: var(--muted);
+  margin-bottom: 1rem;
 }
 
 .span-2 {
   grid-column: span 2;
+}
+
+.span-3 {
+  grid-column: span 3;
 }
 
 .span-4 {
@@ -294,9 +299,10 @@ body[data-theme='light'] #dashboard-accordion .accordion-header .ghost svg {
   color: #fff;
 }
 
-/* Keep dark-mode behavior unchanged */
+/* Ensure icon comes before text in dark mode too */
 body[data-theme='dark'] #dashboard-accordion .accordion-header .ghost {
-  order: 0;
+  order: -1;
+  margin-right: 16px;
 }
 
 /* Force icon + title aligned left for both themes */
