@@ -206,12 +206,12 @@
             <button class="ghost" type="button" id="toggle-form">Adicionar tarefa</button>
           </header>
           <form id="task-form" class="task-form" hidden="">
-            <div class="form-grid">
-              <label>
+            <div class="form-grid form-70-30">
+              <label class="field-name">
                 Nome da tarefa
                 <input type="text" id="task-title" required="">
               </label>
-              <label>
+              <label class="field-status">
                 Status
                 <select id="task-status">
                   <option value="todo">A Fazer</option>
@@ -219,24 +219,27 @@
                   <option value="done">Concluída</option>
                 </select>
               </label>
-              <label>
-                Dia da semana
-                <select id="task-day">
-                  <option value="segunda">Segunda</option>
-                  <option value="terca">Terça</option>
-                  <option value="quarta">Quarta</option>
-                  <option value="quinta">Quinta</option>
-                  <option value="sexta">Sexta</option>
-                </select>
-              </label>
-              <label>
-                Início
-                <input type="time" id="task-start" required="">
-              </label>
-              <label>
-                Término
-                <input type="time" id="task-end" required="">
-              </label>
+
+              <div class="form-row-three">
+                <label>
+                  Dia da semana
+                  <select id="task-day">
+                    <option value="segunda">Segunda</option>
+                    <option value="terca">Terça</option>
+                    <option value="quarta">Quarta</option>
+                    <option value="quinta">Quinta</option>
+                    <option value="sexta">Sexta</option>
+                  </select>
+                </label>
+                <label>
+                  Início
+                  <input type="time" id="task-start" required="">
+                </label>
+                <label>
+                  Término
+                  <input type="time" id="task-end" required="">
+                </label>
+              </div>
             </div>
             <div class="form-actions">
               <button type="submit">Salvar tarefa</button>
