@@ -845,9 +845,10 @@ select:focus {
 
   /* Estilos por dia da semana */
   .agenda-day {
-    background-color: rgba(99, 102, 241, 0.15);
+    background-color: rgba(99, 102, 241, 0.05);
     padding: 8px;
-    border-radius: 4px;
+    padding-top: 1.5rem;
+    border-radius: 10px;
     font-size: 16px;
     margin-bottom: -4px;
   }
