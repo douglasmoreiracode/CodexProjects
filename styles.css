@@ -842,3 +842,17 @@ select:focus {
 
   .task-status-select { min-width: 120px; }
 }
+
+  /* Estilos por dia da semana */
+  .agenda-day {
+    background-color: rgba(99, 102, 241, 0.15);
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-bottom: -4px;
+  }
+
+  /* Espaçamento interno das tarefas */
+  .task-item {
+    margin-left: 8px;
+  }
