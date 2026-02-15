@@ -189,7 +189,6 @@ body {
 #dashboard-accordion .accordion-header {
   height: 65px;
   border-radius: 32.5px;
-  background: var(--accordion-bg);
   padding: 0 20px;
   display: flex;
   align-items: center;
@@ -267,7 +266,6 @@ body[data-theme='dark'] {
 
 /* Light-mode specific header visual (match protótipo) */
 body[data-theme='light'] #dashboard-accordion .accordion-header {
-  background: var(--accordion-bg);
   box-shadow: 0 8px 20px rgba(11, 18, 32, 0.06);
   height: 65px;
   border-radius: 32.5px;
@@ -707,12 +705,14 @@ select:focus {
 }
 
 /* Cada dia como coluna fixa (permite rolagem horizontal) */
-.agenda-day {
-  flex: 0 0 260px;
-  min-width: 220px;
-  scroll-snap-align: start;
-  padding: 12px;
-  border-radius: 12px;
+  .agenda-day {
+    flex: 0 0 260px;
+    min-width: 220px;
+    scroll-snap-align: start;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--accordion-bg);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.03);
 }
 
 /* Cabeçalho do dia */
@@ -761,35 +761,36 @@ select:focus {
 /* Em telas largas, trocar para grid com as 5 colunas (sem rolagem) */
 @media (min-width: 1100px) {
   .agenda {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    display: flex;
     gap: 28px;
-    overflow: visible;
-    padding: 0;
+    overflow-x: auto;
+    padding: 12px 6px;
+    scroll-snap-type: x proximity;
   }
   .agenda-day {
-    flex: 1 1 auto;
-    min-width: 0;
+    flex: 0 0 260px;
+    min-width: 220px;
     padding: 16px;
   }
 }
 
-/* Agenda: layout organizado em colunas responsivas */
+/* Agenda: layout horizontal (linha) */
 .agenda {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(160px, 1fr));
+  display: flex;
   gap: 22px;
   align-items: start;
-  overflow: visible;
-  padding: 0;
+  overflow-x: auto;
+  padding: 0 6px;
+  scroll-snap-type: x proximity;
 }
 
 /* Cada dia como coluna */
-.agenda-day {
-  padding: 12px;
-  border-radius: 12px;
-  min-width: 0;
-}
+  .agenda-day {
+    padding: 12px;
+    border-radius: 12px;
+    min-width: 0;
+    flex: 0 0 260px;
+  }
 
 /* Cabeçalho do dia */
 .agenda-day > header {
@@ -842,18 +843,3 @@ select:focus {
 
   .task-status-select { min-width: 120px; }
 }
-
-  /* Estilos por dia da semana */
-  .agenda-day {
-    background-color: rgba(99, 102, 241, 0.05);
-    padding: 8px;
-    padding-top: 1.5rem;
-    border-radius: 10px;
-    font-size: 16px;
-    margin-bottom: -4px;
-  }
-
-  /* Espaçamento interno das tarefas */
-  .task-item {
-    margin-left: 8px;
-  }
