@@ -15,6 +15,21 @@
   --radius-sm: 12px;
 }
 
+body[data-theme='dark'] {
+  --bg: #0f172a;
+  --card-bg: #111827;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --primary-soft: rgba(99, 102, 241, 0.3);
+  --border: rgba(148, 163, 184, 0.22);
+  --shadow: 0 12px 24px rgba(2, 6, 23, 0.45);
+}
+
+body[data-theme='dark'] {
+  background: radial-gradient(circle at top left, #1e293b 0%, var(--bg) 55%, #020617 100%);
+}
+
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -23,7 +38,7 @@
 
 body {
   font-family: 'Inter', sans-serif;
-  background: radial-gradient(circle at top left, #eef2ff 0%, #f5f7fb 45%, #ffffff 100%);
+  background: radial-gradient(circle at top left, #eef2ff 0%, var(--bg) 45%, #ffffff 100%);
   color: var(--text);
   min-height: 100vh;
   padding: 40px clamp(24px, 6vw, 64px);
@@ -37,6 +52,30 @@ body {
   gap: 32px;
 }
 
+
+.top-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -1rem;
+}
+
+.theme-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #6366f1;
+  background: transparent;
+  color: #6366f1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.theme-icon-btn .theme-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -45,6 +84,7 @@ body {
   padding: 28px 32px;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
+  margin-top: -1rem;
 }
 
 .header h1 {
@@ -55,7 +95,14 @@ body {
 .subtitle {
   margin-top: 8px;
   color: var(--muted);
-  font-size: 15px;
+  font-size: 18px;
+}
+
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .add-task-button {
@@ -92,23 +139,194 @@ body {
 }
 
 .card-header h2 {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
 }
 
 .card-caption {
   display: block;
   margin-top: 4px;
-  font-size: 13px;
+  font-size: 16px;
   color: var(--muted);
+  margin-bottom: 1rem;
 }
 
 .span-2 {
   grid-column: span 2;
 }
 
+.span-3 {
+  grid-column: span 3;
+}
+
 .span-4 {
   grid-column: span 4;
+}
+
+/* Accordion Dashboard */
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.accordion-panel {
+  margin-top: 8px;
+}
+
+.accordion-panel[hidden] {
+  display: none;
+}
+
+.inner-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* Estilização específica do cabeçalho do accordion Dashboard (visual solicitado) */
+#dashboard-accordion .accordion-header {
+  height: 65px;
+  border-radius: 32.5px;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: none;
+}
+
+#dashboard-accordion .accordion-header h2 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #ffffff;
+  text-align: left;
+  margin: 0;
+}
+
+#dashboard-accordion .accordion-header .ghost {
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.9);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: rgba(255,255,255,0.03);
+  transition: transform 0.22s ease, background 0.18s ease;
+}
+
+#dashboard-accordion .accordion-header .ghost svg {
+  display: block;
+  color: #ffffff;
+  transition: transform 0.22s ease;
+}
+
+/* rotate icon when expanded (show chevron pointing up -> collapse) */
+#dashboard-accordion .accordion-header .ghost[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+/* small left spacing between icon and title */
+.accordion-header h2 {
+  margin-left: 12px;
+}
+
+/* Make the accordion header appear as a full-width pill inside the grid */
+#dashboard-accordion {
+  padding: 10px 0 0 0; /* keep card padding but visually align header */
+}
+
+/* Light mode palette variables */
+body[data-theme='light'] {
+  --bg: #f3f6fb;
+  --card-bg: #ffffff;
+  --text: #0b1220;
+  --muted: #6b7280;
+  --primary: #4f46e5;
+  --primary-soft: rgba(79, 70, 229, 0.08);
+  --todo: #f97316;
+  --progress: #0ea5e9;
+  --done: #22c55e;
+  --border: rgba(2, 6, 23, 0.06);
+  --shadow: 0 8px 24px rgba(2, 6, 23, 0.06);
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --accordion-bg: #ffffff; /* pill background in light mode */
+}
+
+/* Ensure we use a variable for accordion bg in dark theme too */
+body[data-theme='dark'] {
+  --accordion-bg: #161d33;
+}
+
+/* Light-mode specific header visual (match protótipo) */
+body[data-theme='light'] #dashboard-accordion .accordion-header {
+  box-shadow: 0 8px 20px rgba(11, 18, 32, 0.06);
+  height: 65px;
+  border-radius: 32.5px;
+  padding: 0 20px;
+  align-items: center;
+}
+
+body[data-theme='light'] #dashboard-accordion .accordion-header h2 {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 24px;
+}
+
+/* Move icon to the start visually in light mode */
+body[data-theme='light'] #dashboard-accordion .accordion-header .ghost {
+  order: -1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.12);
+}
+
+body[data-theme='light'] #dashboard-accordion .accordion-header .ghost svg {
+  color: #fff;
+}
+
+/* Ensure icon comes before text in dark mode too */
+body[data-theme='dark'] #dashboard-accordion .accordion-header .ghost {
+  order: -1;
+  margin-right: 16px;
+}
+
+/* Force icon + title aligned left for both themes */
+#dashboard-accordion .accordion-header {
+  justify-content: flex-start;
+}
+
+#dashboard-accordion .accordion-header .ghost {
+  order: -1;
+  margin-right: 16px;
+}
+
+#dashboard-accordion .accordion-header h2 {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .inner-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .inner-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .progress-list {
@@ -153,27 +371,40 @@ body {
 
 .counter-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.counter-item {
-  background: linear-gradient(145deg, rgba(99, 102, 241, 0.08), rgba(99, 102, 241, 0));
-  padding: 16px;
-  border-radius: var(--radius-md);
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: 61px 89px 83px;
   gap: 8px;
 }
 
+.counter-item {
+  height: 100px;
+  border-radius: 12px;
+  background: linear-gradient(rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0) 100%);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.counter-item:nth-child(1) { width: 61px; }
+.counter-item:nth-child(2) { width: 89px; }
+.counter-item:nth-child(3) { width: 83px; }
+
 .counter-label {
-  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
   font-size: 13px;
+  text-align: left;
+  color: #6b7280;
+  line-height: 1.25;
 }
 
 .counter-value {
-  font-size: 24px;
+  font-family: 'Inter', sans-serif;
   font-weight: 700;
+  font-size: 18px;
+  text-align: left;
+  color: #6366f1;
+  line-height: 1;
 }
 
 .avatar-wrapper {
@@ -215,19 +446,20 @@ body {
 
 .week-calendar {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: 1fr;
+  gap: 12px;
 }
 
 .week-day {
-  padding: 16px;
+  padding: 14px 16px;
   border-radius: var(--radius-md);
   background: rgba(148, 163, 184, 0.12);
   position: relative;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  text-align: left;
 }
 
 .week-day.current {
@@ -302,6 +534,24 @@ body {
 .timer-controls {
   display: flex;
   gap: 12px;
+}
+
+
+#toggle-timer {
+  width: 89px;
+  height: 38px;
+  border-radius: 12px;
+  background: #6366f1;
+  border: 0.5px solid #6366f1;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#reset-timer {
+  width: 89px;
+  height: 38px;
+  border-radius: 12px;
 }
 
 button {
@@ -402,6 +652,46 @@ button.ghost:hover {
   gap: 16px 18px;
 }
 
+/* Precise 70/30 form layout when requested */
+.form-grid.form-70-30 {
+  /* Use fractional units to avoid percentage overflow and keep layout
+     stable across different widths (2:1 ~ 66%/33%). */
+  grid-template-columns: 2fr 1fr;
+  align-items: start;
+  max-width: 100%;
+}
+
+.form-row-three {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px 18px;
+}
+
+@media (max-width: 719px) {
+  .form-grid.form-70-30 { grid-template-columns: 1fr; }
+  .form-row-three { grid-template-columns: 1fr; }
+}
+
+/* Layout específico para o formulário da agenda: primeira linha 70/30 (aprox via 2col span), segunda linha 3 colunas iguais */
+@media (min-width: 720px) {
+  .form-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px 18px;
+  }
+  .form-grid > label:nth-of-type(1) {
+    grid-column: 1 / span 2; /* ocupa ~66% */
+  }
+  .form-grid > label:nth-of-type(2) {
+    grid-column: 3 / 4; /* ocupa ~33% */
+  }
+  /* third, fourth, fifth labels (day, start, end) will naturally occupy columns 1,2,3 on next row */
+}
+
+@media (max-width: 719px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
 label {
   font-size: 13px;
   font-weight: 600;
@@ -419,7 +709,7 @@ select {
   border: 1px solid rgba(148, 163, 184, 0.4);
   font-size: 14px;
   color: var(--text);
-  background: #fff;
+  background: var(--card-bg);
 }
 
 input:focus,
@@ -445,112 +735,223 @@ select:focus {
 }
 
 .agenda {
-  display: grid;
-  gap: 16px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  overflow-x: auto;
+  padding: 12px 6px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
 }
 
-.agenda-day {
-  background: rgba(15, 23, 42, 0.04);
-  border-radius: var(--radius-md);
-  padding: 16px;
+/* Cada dia como coluna fixa (permite rolagem horizontal) */
+  .agenda-day {
+    flex: 0 0 260px;
+    min-width: 220px;
+    scroll-snap-align: start;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--accordion-bg);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.03);
+}
+
+/* Cabeçalho do dia */
+.agenda-day > header {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #595959ad;
+  padding-bottom: 1rem;
 }
 
-.agenda-day header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-}
-
-.agenda-day header h3 {
-  font-size: 16px;
-}
-
-.agenda-day header span {
-  font-size: 12px;
-  color: var(--muted);
-}
-
+/* Itens de tarefa */
 .task-item {
-  display: grid;
-  grid-template-columns: 1fr 140px 110px;
-  gap: 12px;
+  display: flex;
   align-items: center;
-  background: #fff;
-  padding: 12px 14px;
-  border-radius: var(--radius-sm);
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.05);
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
 }
 
-.task-name {
-  font-weight: 600;
+/* Estilos para título e horário das tarefas */
+.task-item .task-name {
+  color: #6366f1;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
 }
 
-.task-time {
-  font-size: 13px;
+.task-item .task-time {
+  font-weight: 800;
+  margin: 0;
   color: var(--muted);
 }
 
-.task-item select {
-  border-radius: var(--radius-sm);
+/* Melhor aparência da barra de rolagem (opcional) */
+.agenda::-webkit-scrollbar { height: 10px; }
+.agenda::-webkit-scrollbar-track { background: transparent; }
+.agenda::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
+/* Em telas largas, trocar para grid com as 5 colunas (sem rolagem) */
+@media (min-width: 1100px) {
+  .agenda {
+    display: flex;
+    gap: 28px;
+    overflow-x: auto;
+    padding: 12px 6px;
+    scroll-snap-type: x proximity;
+  }
+  .agenda-day {
+    flex: 0 0 260px;
+    min-width: 220px;
+    padding: 16px;
+  }
+}
+
+/* Agenda: layout horizontal (linha) */
+.agenda {
+  display: flex;
+  gap: 22px;
+  align-items: start;
+  overflow-x: auto;
+  padding: 0 6px;
+  scroll-snap-type: x proximity;
+}
+
+/* Cada dia como coluna */
+  .agenda-day {
+    padding: 12px;
+    border-radius: 12px;
+    min-width: 0;
+    flex: 0 0 260px;
+  }
+
+/* Cabeçalho do dia */
+.agenda-day > header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #595959ad;
+  padding-bottom: 1rem;
+}
+
+/* Itens de tarefa: empilhar conteúdo para evitar sobreposição */
+.task-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Nome e horário ficam juntos à esquerda */
+.task-item > div {
+  max-width: 100%;
+}
+
+/* Select de status menor e alinhado sem quebrar layout */
+.task-status-select {
+  min-width: 140px;
+  max-width: 100%;
+}
+
+/* Scroll horizontal em telas pequenas */
+@media (max-width: 1099px) {
+  .agenda {
+    display: flex;
+    gap: 18px;
+    padding: 12px 6px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .agenda-day {
+    flex: 0 0 260px;
+    min-width: 220px;
+    scroll-snap-align: start;
+    padding: 12px;
+  }
+
+  .task-status-select { min-width: 120px; }
+}
+
+/* Responsive adjustments: medium and small screens */
 @media (max-width: 1100px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .span-4 {
-    grid-column: span 2;
-  }
-
-  .counter-grid {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  }
-
-  .week-calendar {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  }
-
-  .progress-item {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  .progress-value {
-    text-align: left;
-  }
-}
-
-@media (max-width: 720px) {
-  body {
-    padding: 24px 16px 64px;
-  }
-
-  .grid {
-    grid-template-columns: 1fr;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
     gap: 16px;
   }
 
-  .span-2,
-  .span-4 {
-    grid-column: span 1;
+  .card {
+    padding: 18px;
+  }
+
+  #dashboard-accordion .accordion-header {
+    padding: 0 12px;
+    height: 60px;
+  }
+
+  .agenda {
+    gap: 16px;
+    padding: 12px;
+  }
+
+  .agenda-day {
+    flex: 0 0 220px;
+    min-width: 200px;
+    padding-top: 1rem;
+    margin-bottom: 0; /* avoid overlap on smaller screens */
+    border-radius: 8px;
   }
 
   .task-item {
+    margin-left: 0; /* remove left indent on small widths */
+  }
+}
+
+@media (max-width: 700px) {
+  .grid {
     grid-template-columns: 1fr;
-    gap: 8px;
-    align-items: flex-start;
+    gap: 12px;
   }
 
-  .task-item select {
-    width: 100%;
+  .inner-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .timer-display {
+    width: 140px;
+    height: 140px;
+  }
+
+  .timer-value { font-size: 28px; }
+
+  .agenda {
+    gap: 12px;
+    padding: 10px 6px;
+  }
+
+  .agenda-day {
+    flex: 0 0 200px;
+    padding-top: 0.75rem;
+    margin-bottom: 0;
+  }
+
+  .task-item {
+    gap: 6px;
   }
 }
