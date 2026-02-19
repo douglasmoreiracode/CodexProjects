@@ -654,8 +654,11 @@ button.ghost:hover {
 
 /* Precise 70/30 form layout when requested */
 .form-grid.form-70-30 {
-  grid-template-columns: 70% 30%;
+  /* Use fractional units to avoid percentage overflow and keep layout
+     stable across different widths (2:1 ~ 66%/33%). */
+  grid-template-columns: 2fr 1fr;
   align-items: start;
+  max-width: 100%;
 }
 
 .form-row-three {
